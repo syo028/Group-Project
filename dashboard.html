@@ -153,10 +153,9 @@
         }
 
         .main-content {
-            margin-left: 250px;
+            margin: 80px auto 0;
             padding: 2rem;
             max-width: 800px;
-            margin-top: 80px;
             width: 100%;
         }
 
@@ -180,6 +179,39 @@
             resize: vertical;
         }
 
+        .post-form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .image-upload {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .image-upload label {
+            color: var(--neon-blue);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .image-upload label:hover {
+            color: var(--neon-pink);
+        }
+
+        .image-preview {
+            display: none;
+            margin: 1rem 0;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            border-radius: 5px;
+        }
         .post-form button {
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
             color: white;
@@ -346,17 +378,25 @@
                 <i class="fas fa-user"></i>
             </div>
             <a href="#" id="username-display"></a>
-            <button class="logout-btn" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                登出
-            </button>
         </div>
     </nav>
 
     <main class="main-content">
         <div class="post-form">
             <textarea placeholder="分享你的想法..." rows="4"></textarea>
-            <button onclick="createPost()">發布</button>
+            <div class="image-preview">
+                <img id="preview-image" src="" alt="Preview">
+            </div>
+            <div class="post-form-actions">
+                <div class="image-upload">
+                    <label for="image-input">
+                        <i class="fas fa-image"></i>
+                        <span>添加圖片</span>
+                    </label>
+                    <input type="file" id="image-input" accept="image/*" style="display: none;">
+                </div>
+                <button onclick="createPost()">發布</button>
+            </div>
         </div>
 
         <div class="posts" id="posts-container">
@@ -367,6 +407,7 @@
     <script>
         let currentUser = '';
         let posts = [];
+        let selectedImage = null;
 
         // 檢查登入狀態
         window.onload = function() {
@@ -377,6 +418,47 @@
             }
             document.getElementById('username-display').textContent = currentUser;
             loadPosts();
+
+            // 添加圖片預覽功能
+            document.getElementById('image-input').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        document.getElementById('preview-image').src = e.target.result;
+                        document.querySelector('.image-preview').style.display = 'block';
+                        selectedImage = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+
+        function createPost() {
+            const content = document.querySelector('.post-form textarea').value.trim();
+            if (!content && !selectedImage) return;
+
+            const newPost = {
+                id: Date.now(),
+                author: currentUser,
+                content: content,
+                image: selectedImage || `https://picsum.photos/800/400?random=${Math.floor(Math.random() * 100)}`,
+                likes: [],
+                comments: [],
+                timestamp: new Date().toISOString()
+            };
+
+            posts.unshift(newPost);
+            localStorage.setItem('posts', JSON.stringify(posts));
+            
+            // 重置表單
+            document.querySelector('.post-form textarea').value = '';
+            document.getElementById('preview-image').src = '';
+            document.querySelector('.image-preview').style.display = 'none';
+            document.getElementById('image-input').value = '';
+            selectedImage = null;
+            
+            renderPosts();
         }
 
         function logout() {
