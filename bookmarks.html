@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bookmarks - Dragonote</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(18, 18, 31, 0.95);
+            padding: 2rem 1rem;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .menu {
+            margin-top: 4rem;
+        }
+
+        .menu-title {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .menu-item.active {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: 100%;
+            margin-top: 80px;
+        }
+
+        .navbar {
+            background: rgba(18, 18, 31, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: fixed;
+            width: calc(100% - 250px);
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--neon-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .bookmarks {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .bookmark-card {
+            background: rgba(18, 18, 31, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+        }
+
+        .bookmark-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bookmark-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .bookmark-content {
+            padding: 1rem;
+        }
+
+        .bookmark-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .bookmark-author {
+            color: var(--neon-blue);
+            font-weight: bold;
+        }
+
+        .bookmark-time {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .bookmark-text {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .bookmark-actions {
+            display: flex;
+            gap: 1rem;
+            color: #888;
+        }
+
+        .bookmark-actions button {
+            background: none;
+            border: none;
+            color: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .bookmark-actions button:hover {
+            color: var(--neon-blue);
+        }
+
+        .bookmark-actions button.remove {
+            margin-left: auto;
+            color: var(--neon-pink);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 2rem;
+            color: #888;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--neon-blue);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">DRAGONOTE</div>
+        <div class="menu">
+            <div class="menu-title">Menu</div>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                Feed
+            </a>
+            <a href="explore.html" class="menu-item">
+                <i class="fas fa-compass"></i>
+                Explore
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="fas fa-envelope"></i>
+                Messages
+            </a>
+            <a href="notifications.html" class="menu-item">
+                <i class="fas fa-bell"></i>
+                Notifications
+            </a>
+            <a href="bookmarks.html" class="menu-item active">
+                <i class="fas fa-bookmark"></i>
+                Bookmarks
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                登出
+            </a>
+        </div>
+    </nav>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <a href="#" id="username-display"></a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="bookmarks" id="bookmarks-container">
+            <!-- 書籤將由JavaScript動態生成 -->
+        </div>
+    </main>
+
+    <script>
+        let currentUser = '';
+        let bookmarks = [];
+
+        window.onload = function() {
+            currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('username-display').textContent = currentUser;
+            loadBookmarks();
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        function loadBookmarks() {
+            // 從localStorage加載書籤
+            bookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            renderBookmarks();
+        }
+
+        function renderBookmarks() {
+            const container = document.getElementById('bookmarks-container');
+            
+            if (bookmarks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-bookmark"></i>
+                        <h2>還沒有書籤</h2>
+                        <p>瀏覽貼文時點擊書籤圖標來保存感興趣的內容</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = bookmarks.map(bookmark => `
+                <div class="bookmark-card">
+                    <img src="${bookmark.image}" class="bookmark-image" alt="Bookmark image">
+                    <div class="bookmark-content">
+                        <div class="bookmark-header">
+                            <span class="bookmark-author">${bookmark.author}</span>
+                            <span class="bookmark-time">${formatTime(bookmark.timestamp)}</span>
+                        </div>
+                        <p class="bookmark-text">${bookmark.content}</p>
+                        <div class="bookmark-actions">
+                            <button>
+                                <i class="fas fa-heart"></i>
+                                <span>${bookmark.likes.length}</span>
+                            </button>
+                            <button>
+                                <i class="fas fa-comment"></i>
+                                <span>${bookmark.comments.length}</span>
+                            </button>
+                            <button class="remove" onclick="removeBookmark(${bookmark.id})">
+                                <i class="fas fa-trash"></i>
+                                移除書籤
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function removeBookmark(bookmarkId) {
+            bookmarks = bookmarks.filter(bookmark => bookmark.id !== bookmarkId);
+            localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+            renderBookmarks();
+        }
+
+        function formatTime(timestamp) {
+            const date = new Date(timestamp);
+            return date.toLocaleString('zh-TW');
+        }
+    </script>
+</body>
+</html>

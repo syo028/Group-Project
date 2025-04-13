@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Dragonote</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(18, 18, 31, 0.95);
+            padding: 2rem 1rem;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .menu {
+            margin-top: 4rem;
+        }
+
+        .menu-title {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .menu-item.active {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: 100%;
+            margin-top: 80px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .navbar {
+            background: rgba(18, 18, 31, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: fixed;
+            width: calc(100% - 250px);
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .logout-btn {
+            color: var(--neon-pink);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .settings-section {
+            background: rgba(18, 18, 31, 0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .settings-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #888;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group input[type="password"],
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .toggle-switch {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+        }
+
+        .toggle-switch input[type="checkbox"] {
+            display: none;
+        }
+
+        .toggle-slider {
+            width: 50px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            position: relative;
+            transition: background 0.3s ease;
+        }
+
+        .toggle-slider:before {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle-switch input[type="checkbox"]:checked + .toggle-slider {
+            background: var(--neon-blue);
+        }
+
+        .toggle-switch input[type="checkbox"]:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+
+        .save-button {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .save-button:hover {
+            transform: scale(1.02);
+        }
+
+        .danger-zone {
+            border: 1px solid var(--neon-pink);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-top: 2rem;
+        }
+
+        .danger-zone h3 {
+            color: var(--neon-pink);
+            margin-bottom: 1rem;
+        }
+
+        .delete-account-btn {
+            background: var(--neon-pink);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .delete-account-btn:hover {
+            background: #ff1a1a;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">DRAGONOTE</div>
+        <div class="menu">
+            <div class="menu-title">Menu</div>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                Feed
+            </a>
+            <a href="explore.html" class="menu-item">
+                <i class="fas fa-compass"></i>
+                Explore
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="fas fa-envelope"></i>
+                Messages
+            </a>
+            <a href="notifications.html" class="menu-item">
+                <i class="fas fa-bell"></i>
+                Notifications
+            </a>
+            <a href="bookmarks.html" class="menu-item">
+                <i class="fas fa-bookmark"></i>
+                Bookmarks
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="settings.html" class="menu-item active">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                登出
+            </a>
+        </div>
+    </nav>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <a href="#" id="username-display"></a>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                登出
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="settings-section">
+            <h2 class="settings-title">個人資料設定</h2>
+            <div class="form-group">
+                <label>用戶名稱</label>
+                <input type="text" id="username" value="">
+            </div>
+            <div class="form-group">
+                <label>電子郵件</label>
+                <input type="email" id="email" value="">
+            </div>
+            <div class="form-group">
+                <label>個人簡介</label>
+                <textarea id="bio">熱愛分享生活點滴，探索世界的美好。</textarea>
+            </div>
+            <button class="save-button" onclick="saveProfile()">儲存變更</button>
+        </div>
+
+        <div class="settings-section">
+            <h2 class="settings-title">通知設定</h2>
+            <div class="form-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="email-notifications" checked>
+                    <span class="toggle-slider"></span>
+                    電子郵件通知
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="push-notifications" checked>
+                    <span class="toggle-slider"></span>
+                    推送通知
+                </label>
+            </div>
+            <button class="save-button" onclick="saveNotificationSettings()">儲存設定</button>
+        </div>
+
+        <div class="settings-section">
+            <h2 class="settings-title">安全設定</h2>
+            <div class="form-group">
+                <label>目前密碼</label>
+                <input type="password" id="current-password">
+            </div>
+            <div class="form-group">
+                <label>新密碼</label>
+                <input type="password" id="new-password">
+            </div>
+            <div class="form-group">
+                <label>確認新密碼</label>
+                <input type="password" id="confirm-password">
+            </div>
+            <button class="save-button" onclick="changePassword()">更改密碼</button>
+
+            <div class="danger-zone">
+                <h3>危險區域</h3>
+                <p>刪除帳號後將無法復原，請謹慎操作。</p>
+                <button class="delete-account-btn" onclick="deleteAccount()">刪除帳號</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let currentUser = '';
+
+        window.onload = function() {
+            currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('username-display').textContent = currentUser;
+            document.getElementById('username').value = currentUser;
+            loadUserSettings();
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        function loadUserSettings() {
+            // 這裡可以從localStorage或後端API加載用戶設定
+            const userSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            document.getElementById('email').value = userSettings.email || '';
+            document.getElementById('bio').value = userSettings.bio || '熱愛分享生活點滴，探索世界的美好。';
+            document.getElementById('email-notifications').checked = userSettings.emailNotifications !== false;
+            document.getElementById('push-notifications').checked = userSettings.pushNotifications !== false;
+        }
+
+        function saveProfile() {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const bio = document.getElementById('bio').value.trim();
+
+            if (!username || !email) {
+                alert('請填寫必要欄位');
+                return;
+            }
+
+            // 儲存設定
+            const userSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            userSettings.email = email;
+            userSettings.bio = bio;
+            localStorage.setItem('userSettings', JSON.stringify(userSettings));
+
+            // 如果更改了用戶名，需要更新currentUser
+            if (username !== currentUser) {
+                localStorage.setItem('currentUser', username);
+                currentUser = username;
+                document.getElementById('username-display').textContent = username;
+            }
+
+            alert('個人資料已更新');
+        }
+
+        function saveNotificationSettings() {
+            const emailNotifications = document.getElementById('email-notifications').checked;
+            const pushNotifications = document.getElementById('push-notifications').checked;
+
+            const userSettings = JSON.parse(localStorage.getItem('userSettings') || '{}');
+            userSettings.emailNotifications = emailNotifications;
+            userSettings.pushNotifications = pushNotifications;
+            localStorage.setItem('userSettings', JSON.stringify(userSettings));
+
+            alert('通知設定已更新');
+        }
+
+        function changePassword() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                alert('請填寫所有密碼欄位');
+                return;
+            }
+
+            if (newPassword !== confirmPassword) {
+                alert('新密碼與確認密碼不符');
+                return;
+            }
+
+            // 這裡應該要驗證目前密碼是否正確
+            // 然後更新密碼
+            alert('密碼已更新');
+
+            // 清空密碼欄位
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+        }
+
+        function deleteAccount() {
+            if (confirm('確定要刪除帳號嗎？此操作無法復原。')) {
+                // 這裡應該要呼叫API來刪除帳號
+                localStorage.clear(); // 清除所有本地存儲
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>

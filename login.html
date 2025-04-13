@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Log-in - Dragonote</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(45deg, #0a0a0f 25%, #12121f 25%, #12121f 50%, #0a0a0f 50%, #0a0a0f 75%, #12121f 75%, #12121f 100%);
+            background-size: 56.57px 56.57px;
+        }
+
+        .container {
+            background: rgba(18, 18, 31, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--neon-blue);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .register-link a {
+            color: var(--neon-blue);
+            text-decoration: none;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--neon-pink);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">DRAGONOTE</div>
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+            <div class="form-group">
+                <label for="username">用戶名稱</label>
+                <input type="text" id="username" required>
+                <div class="error-message" id="username-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" required>
+                <div class="error-message" id="password-error"></div>
+            </div>
+            <button type="submit">登入</button>
+        </form>
+        <div class="register-link">
+            還沒有帳號？ <a href="register.html">註冊</a>
+        </div>
+    </div>
+
+    <script>
+        // 檢查是否已登入
+        window.onload = function() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                window.location.href = 'dashboard.html';
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // 重置錯誤訊息
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // 獲取用戶資料
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            const user = users.find(u => u.username === username);
+            
+            // 驗證用戶名和密碼
+            if (!user) {
+                showError('username-error', '用戶名稱不存在');
+                return false;
+            }
+            
+            if (user.password !== password) {
+                showError('password-error', '密碼錯誤');
+                return false;
+            }
+            
+            // 登入成功
+            localStorage.setItem('currentUser', username);
+            window.location.href = 'dashboard.html';
+            return false;
+        }
+        
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>

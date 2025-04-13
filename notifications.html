@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Dragonote</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(18, 18, 31, 0.95);
+            padding: 2rem 1rem;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .menu {
+            margin-top: 4rem;
+        }
+
+        .menu-title {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            padding-left: 1rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--neon-blue);
+        }
+
+        .menu-item.active {
+            background: rgba(0, 243, 255, 0.2);
+            color: var(--neon-blue);
+        }
+
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+            width: 100%;
+            margin-top: 80px;
+        }
+
+        .navbar {
+            background: rgba(18, 18, 31, 0.95);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            position: fixed;
+            width: calc(100% - 250px);
+            top: 0;
+            right: 0;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .logout-btn {
+            color: var(--neon-pink);
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--neon-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--neon-blue);
+        }
+
+        .notifications {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .notification {
+            background: rgba(18, 18, 31, 0.9);
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .notification:hover {
+            transform: translateX(5px);
+            background: rgba(0, 243, 255, 0.1);
+        }
+
+        .notification.unread {
+            border-left: 3px solid var(--neon-blue);
+        }
+
+        .notification-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--neon-pink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .notification-content {
+            flex: 1;
+        }
+
+        .notification-text {
+            margin-bottom: 0.3rem;
+        }
+
+        .notification-time {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .notification-actions button {
+            background: none;
+            border: none;
+            color: #888;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .notification-actions button:hover {
+            color: var(--neon-blue);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="logo">DRAGONOTE</div>
+        <div class="menu">
+            <div class="menu-title">Menu</div>
+            <a href="dashboard.html" class="menu-item">
+                <i class="fas fa-home"></i>
+                Feed
+            </a>
+            <a href="explore.html" class="menu-item">
+                <i class="fas fa-compass"></i>
+                Explore
+            </a>
+            <a href="messages.html" class="menu-item">
+                <i class="fas fa-envelope"></i>
+                Messages
+            </a>
+            <a href="notifications.html" class="menu-item active">
+                <i class="fas fa-bell"></i>
+                Notifications
+            </a>
+            <a href="bookmarks.html" class="menu-item">
+                <i class="fas fa-bookmark"></i>
+                Bookmarks
+            </a>
+            <a href="profile.html" class="menu-item">
+                <i class="fas fa-user"></i>
+                Profile
+            </a>
+            <a href="settings.html" class="menu-item">
+                <i class="fas fa-cog"></i>
+                Settings
+            </a>
+            <a href="#" class="menu-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                登出
+            </a>
+        </div>
+    </nav>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <div class="user-avatar">
+                <i class="fas fa-user"></i>
+            </div>
+            <a href="#" id="username-display"></a>
+            <button class="logout-btn" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                登出
+            </button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="notifications" id="notifications-container">
+            <!-- 通知將由JavaScript動態生成 -->
+        </div>
+    </main>
+
+    <script>
+        let currentUser = '';
+        let notifications = [];
+
+        window.onload = function() {
+            currentUser = localStorage.getItem('currentUser');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+            document.getElementById('username-display').textContent = currentUser;
+            loadNotifications();
+        }
+
+        function logout() {
+            localStorage.removeItem('currentUser');
+            window.location.href = 'login.html';
+        }
+
+        function loadNotifications() {
+            // 模擬通知數據
+            notifications = [
+                {
+                    id: 1,
+                    type: 'like',
+                    user: '王小明',
+                    content: '喜歡了你的貼文',
+                    time: '5分鐘前',
+                    unread: true
+                },
+                {
+                    id: 2,
+                    type: 'comment',
+                    user: '李小華',
+                    content: '在你的貼文中留言',
+                    time: '10分鐘前',
+                    unread: true
+                },
+                {
+                    id: 3,
+                    type: 'follow',
+                    user: '張大明',
+                    content: '開始追蹤你',
+                    time: '1小時前',
+                    unread: false
+                }
+            ];
+            renderNotifications();
+        }
+
+        function renderNotifications() {
+            const container = document.getElementById('notifications-container');
+            container.innerHTML = notifications.map(notification => `
+                <div class="notification ${notification.unread ? 'unread' : ''}" onclick="markAsRead(${notification.id})">
+                    <div class="notification-icon">
+                        ${getNotificationIcon(notification.type)}
+                    </div>
+                    <div class="notification-content">
+                        <div class="notification-text">
+                            <strong>${notification.user}</strong> ${notification.content}
+                        </div>
+                        <div class="notification-time">${notification.time}</div>
+                    </div>
+                    <div class="notification-actions">
+                        <button onclick="deleteNotification(${notification.id}, event)">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getNotificationIcon(type) {
+            switch(type) {
+                case 'like':
+                    return '<i class="fas fa-heart"></i>';
+                case 'comment':
+                    return '<i class="fas fa-comment"></i>';
+                case 'follow':
+                    return '<i class="fas fa-user-plus"></i>';
+                default:
+                    return '<i class="fas fa-bell"></i>';
+            }
+        }
+
+        function markAsRead(notificationId) {
+            const notification = notifications.find(n => n.id === notificationId);
+            if (notification) {
+                notification.unread = false;
+                renderNotifications();
+            }
+        }
+
+        function deleteNotification(notificationId, event) {
+            event.stopPropagation();
+            notifications = notifications.filter(n => n.id !== notificationId);
+            renderNotifications();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>register - Dragonote</title>
+    <style>
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-pink: #ff00ff;
+            --dark-bg: #0a0a0f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: linear-gradient(45deg, #0a0a0f 25%, #12121f 25%, #12121f 50%, #0a0a0f 50%, #0a0a0f 75%, #12121f 75%, #12121f 100%);
+            background-size: 56.57px 56.57px;
+        }
+
+        .container {
+            background: rgba(18, 18, 31, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--neon-blue);
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        button:hover {
+            transform: scale(1.02);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .login-link a {
+            color: var(--neon-blue);
+            text-decoration: none;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        .error-message {
+            color: var(--neon-pink);
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">DRAGONOTE</div>
+        <form id="registerForm" onsubmit="return handleRegister(event)">
+            <div class="form-group">
+                <label for="username">用戶名稱</label>
+                <input type="text" id="username" required minlength="3" maxlength="20">
+                <div class="error-message" id="username-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">密碼</label>
+                <input type="password" id="password" required minlength="6">
+                <div class="error-message" id="password-error"></div>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">確認密碼</label>
+                <input type="password" id="confirmPassword" required>
+                <div class="error-message" id="confirm-password-error"></div>
+            </div>
+            <button type="submit">註冊</button>
+        </form>
+        <div class="login-link">
+            已有帳號？ <a href="login.html">登入</a>
+        </div>
+    </div>
+
+    <script>
+        function handleRegister(event) {
+            event.preventDefault();
+            
+            // 重置錯誤訊息
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // 驗證用戶名
+            if (username.length < 3) {
+                showError('username-error', '用戶名稱至少需要3個字元');
+                return false;
+            }
+            
+            // 驗證密碼
+            if (password.length < 6) {
+                showError('password-error', '密碼至少需要6個字元');
+                return false;
+            }
+            
+            // 確認密碼
+            if (password !== confirmPassword) {
+                showError('confirm-password-error', '密碼不一致');
+                return false;
+            }
+            
+            // 檢查用戶名是否已存在
+            const users = JSON.parse(localStorage.getItem('users') || '[]');
+            if (users.some(user => user.username === username)) {
+                showError('username-error', '此用戶名稱已被使用');
+                return false;
+            }
+            
+            // 儲存用戶資料
+            users.push({
+                username,
+                password,
+                following: [],
+                followers: [],
+                posts: [],
+                createdAt: new Date().toISOString()
+            });
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            // 自動登入
+            localStorage.setItem('currentUser', username);
+            
+            // 導向到儀表板
+            window.location.href = 'dashboard.html';
+            return false;
+        }
+        
+        function showError(elementId, message) {
+            const errorElement = document.getElementById(elementId);
+            errorElement.textContent = message;
+            errorElement.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
