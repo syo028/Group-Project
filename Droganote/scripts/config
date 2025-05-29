@@ -1,0 +1,4 @@
+user=node
+host=Droganote.cc
+root_dir=/home/node/workspace/github.com/cute_/Droganote
+pm2_name="Droganote"
