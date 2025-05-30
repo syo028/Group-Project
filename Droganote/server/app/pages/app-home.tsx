@@ -24,6 +24,8 @@ let posts = [
     comments: 5,
     tags: ['tag1', 'tag2', 'tag3'],
     photos: 'https://picsum.photos/200',
+    created_at: '21May2025 11:00',
+    updated_at: '21May2025 11:00',
   },
   {
     id: 2,
@@ -34,6 +36,8 @@ let posts = [
     comments: 10,
     tags: ['tag4', 'tag5', 'tag6'],
     photos: 'https://picsum.photos/200',
+    created_at: '21May2025 11:00',
+    updated_at: '21May2025 11:00',
   },
   {
     id: 3,
@@ -44,6 +48,8 @@ let posts = [
     comments: 15,
     tags: ['tag7', 'tag8', 'tag9'],
     photos: 'https://picsum.photos/200',
+    created_at: '21May2025 11:00',
+    updated_at: '21May2025 11:00',
   },
 ]
 
@@ -108,6 +114,12 @@ ion-title {
   margin-top: 10px;
   display: block;
 }
+
+.post-timestamp {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
 `)
 
 let script = Script(/* javascript */ `
@@ -168,6 +180,7 @@ let homePage = (
               </div>
               <div class="post-content-Title">{post.title}</div>
               <img src={post.photos} alt="post image" class="post-photo" />
+              <div class="post-timestamp">{post.created_at}</div>
             </div>
           </Link>
         ))}
