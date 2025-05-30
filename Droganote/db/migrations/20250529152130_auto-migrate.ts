@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
       table.text('likes').notNullable()
       table.text('comments').notNullable()
       table.text('tags').notNullable()
-      table.attribute('photos').notNullable()
+      table.text('photos').notNullable()
       table.timestamps(false, true)
     })
   }

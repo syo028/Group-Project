@@ -138,9 +138,44 @@ likes integer
 comments integer
 tags text[]
 photos text
-created_at integer
-updated_at integer
+created_at integer NULL
+updated_at integer NULL
 
+comment
+-------
+id integer PK
+post_id integer FK >- post.id
+user_id integer FK >- user.id
+content text
+created_at integer NULL
+updated_at integer NULL
+
+chatroom
+--------
+id integer PK
+name text
+description text NULL
+created_by integer FK >- user.id
+created_at integer NULL
+updated_at integer NULL
+
+chatroom_member
+--------------
+id integer PK
+chatroom_id integer FK >- chatroom.id
+user_id integer FK >- user.id
+role text
+joined_at integer NULL
+left_at integer NULL
+
+chat_message
+-----------
+id integer PK
+chatroom_id integer FK >- chatroom.id
+user_id integer FK >- user.id
+content text
+created_at integer NULL
+updated_at integer NULL
 
 # zoom: 0.754
 # view: (57, 305)
@@ -164,3 +199,7 @@ updated_at integer
 # posting (234, 809)
 # content_report (216, 486)
 # post (234, 750)
+# comment (234, 850)
+# chatroom (234, 950)
+# chatroom_member (234, 1050)
+# chat_message (234, 1150)

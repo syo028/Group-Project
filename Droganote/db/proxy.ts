@@ -92,6 +92,10 @@ export type VerificationCode = {
   user?: User
 }
 
+export type Posting = {
+  id?: null | number
+}
+
 export type ContentReport = {
   id?: null | number
   reporter_id: null | number
@@ -106,6 +110,20 @@ export type ContentReport = {
   reject_time: null | number
 }
 
+export type Post = {
+  id?: null | number
+  user_id: number
+  user?: User
+  title: string
+  description: string
+  likes: number
+  comments: number
+  tags: string
+  photos: string
+  created_at: number
+  updated_at: number
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -118,7 +136,9 @@ export type DBProxy = {
   request_log: RequestLog[]
   verification_attempt: VerificationAttempt[]
   verification_code: VerificationCode[]
+  posting: Posting[]
   content_report: ContentReport[]
+  post: Post[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -150,10 +170,15 @@ export let proxy = proxySchema<DBProxy>({
       ['match', { field: 'match_id', table: 'verification_attempt' }],
       ['user', { field: 'user_id', table: 'user' }],
     ],
+    posting: [],
     content_report: [
       /* foreign references */
       ['reporter', { field: 'reporter_id', table: 'user' }],
       ['reviewer', { field: 'reviewer_id', table: 'user' }],
+    ],
+    post: [
+      /* foreign references */
+      ['user', { field: 'user_id', table: 'user' }],
     ],
   },
 })
