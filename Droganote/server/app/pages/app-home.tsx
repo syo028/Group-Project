@@ -95,7 +95,7 @@ ion-title {
   flex-direction: column;
   align-items: flex-start;
   gap: 2px;
-  margin-top: 10px;
+  margin-top: 15px;
   width: 100%;
 }
 
@@ -119,6 +119,12 @@ ion-title {
   font-size: 12px;
   color: #666;
   margin-top: 4px;
+}
+
+.post-row {
+  margin-bottom: 16px;
+  --padding-start: 0;
+  --inner-padding-end: 0;
 }
 `)
 
@@ -180,7 +186,7 @@ let homePage = (
               </div>
               <div class="post-content-Title">{post.title}</div>
               <img src={post.photos} alt="post image" class="post-photo" />
-              <div class="post-timestamp">{post.created_at}</div>
+              <div class="post-timestamp">created at: {post.created_at}</div>
             </div>
           </Link>
         ))}
