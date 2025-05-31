@@ -143,8 +143,8 @@ let homePage = (
           alt="logo"
           style={{
             margin: 'auto',
-            height: '10px',
-            width: '10px',
+            height: '1px',
+            width: '1px',
           }}
         />
       </div>
@@ -178,13 +178,13 @@ function postsList() {
                 <div class="post-content-Name">
                   <strong>{post.username}</strong>
                   <ion-icon name="heart-outline"></ion-icon>
-                  <span>{post.likes}</span>
+                  <span>{post.like_count}</span>
                   <ion-icon name="chatbubble-outline"></ion-icon>
-                  <span>{post.comments}</span>
+                  <span>{post.comment_count}</span>
                 </div>
               </div>
               <div class="post-content-Title">{post.title}</div>
-              <img src={post.photos} alt="post image" class="post-photo" />
+              <img src={post.photo_url} alt="post image" class="post-photo" />
               <div class="post-timestamp">created at: {post.created_at}</div>
             </div>
           </Link>
