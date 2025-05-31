@@ -124,9 +124,11 @@ reject_time integer NULL
 post
 ----
 id integer PK
+title text
 username varchar(32) NULL
 user_id integer NULL FK >0- user.id
 content text
+tags text
 like_count INTEGER
 comment_count INTEGER
 created_at DATETIME

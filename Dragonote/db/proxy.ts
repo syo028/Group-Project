@@ -108,10 +108,12 @@ export type ContentReport = {
 
 export type Post = {
   id?: null | number
+  title: string
   username: null | string
   user_id: null | number
   user?: User
   content: string
+  tags: string
   like_count: number
   comment_count: number
   created_at: string
