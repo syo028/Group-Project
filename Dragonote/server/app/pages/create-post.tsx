@@ -28,7 +28,7 @@ let style = Style(/* css */ `
 }
 `)
 
-let page = (
+let page = (context: DynamicContext) => (
   <>
     {style}
     <ion-header>
@@ -46,7 +46,8 @@ let page = (
   </>
 )
 
-function Main(attrs: {}, context: Context) {
+function Main(props: { attrs: {}; context: DynamicContext }) {
+  let { attrs, context } = props
   let items = proxy.post
   let user = getAuthUser(context)
   return (
@@ -96,15 +97,6 @@ let addPage = (
       >
         <ion-list>
           <ion-item>
-            <ion-select aria-label="TagsLabel" placeholder="Select Tag">
-              <ion-select-option value="時尚穿搭">時尚穿搭</ion-select-option>
-              <ion-select-option value="美食">美食</ion-select-option>
-              <ion-select-option value="旅行">旅行</ion-select-option>
-              <ion-select-option value="運動">運動</ion-select-option>
-            </ion-select>
-          </ion-item>
-
-          <ion-item>
             <ion-input
               name="title"
               label="標題:"
@@ -118,15 +110,20 @@ let addPage = (
           <ion-item>
             <ion-input
               name="slug"
-              label="圖片: (unique url)"
+              label="Slug*: (unique url)"
               label-placement="floating"
-              required
-              pattern="(\w|-|\.){1,32}"
             />
           </ion-item>
           <p class="hint">
             (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
           </p>
+          <ion-item>
+            <ion-input
+              name="PhotoUrl"
+              label="Photo: (unique url)"
+              label-placement="floating"
+            />
+          </ion-item>
           <div>
             <ion-item>
               <ion-input
@@ -159,7 +156,8 @@ function AddPage(attrs: {}, context: DynamicContext) {
 
 let submitParser = object({
   title: string({ minLength: 3, maxLength: 50 }),
-  slug: string({ match: /^[\w-]{1,32}$/ }),
+  slug: string(),
+  description: string(),
 })
 
 function Submit(attrs: {}, context: DynamicContext) {
@@ -168,10 +166,24 @@ function Submit(attrs: {}, context: DynamicContext) {
     if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
-    let id = items.push({
+
+    let newPost = {
+      username: user.username,
+      user_id: user.id ?? null,
+      description: '',
+      content: input.description || '',
       title: input.title,
-      slug: input.slug,
-    })
+      tags: '未分類',
+      like_count: 0,
+      comment_count: 0,
+      slug: null,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      photo_url: input.slug || null,
+    }
+
+    let id = proxy.post.push(newPost)
+
     return <Redirect href={`/create-post/result?id=${id}`} />
   } catch (error) {
     throwIfInAPI(error, '#add-message', context)
@@ -217,12 +229,13 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
 
 let routes = {
   '/create-post': {
-    resolve(context) {
+    resolve(context: DynamicContext) {
       let t = evalLocale(pageTitle, context)
       return {
         title: title(t),
         description: 'TODO',
-        node: page,
+        node: page(context),
+        streaming: false,
       }
     },
   },

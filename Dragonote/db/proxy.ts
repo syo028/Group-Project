@@ -117,6 +117,7 @@ export type Post = {
   tags: string
   like_count: number
   comment_count: number
+  slug: null | string
   created_at: string
   updated_at: string
   photo_url: null | string

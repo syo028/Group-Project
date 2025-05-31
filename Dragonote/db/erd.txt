@@ -132,6 +132,7 @@ title text
 tags text
 like_count integer
 comment_count integer
+slug text NULL
 created_at DATETIME
 updated_at DATETIME
 photo_url text NULL
