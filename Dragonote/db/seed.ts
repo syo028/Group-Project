@@ -20,6 +20,36 @@ proxy.user[1] = {
   nickname: null,
 }
 
+proxy.user[1] = {
+  username: 'John Doe',
+  password_hash: null,
+  email: null,
+  tel: null,
+  avatar: null,
+  is_admin: false,
+  nickname: null,
+}
+
+proxy.user[2] = {
+  username: 'Jane Smith',
+  password_hash: null,
+  email: 'jane.smith@example.com',
+  tel: null,
+  avatar: 'https://picsum.photos/100',
+  is_admin: false,
+  nickname: 'JaneS',
+}
+
+proxy.user[3] = {
+  username: 'Alex Wong',
+  password_hash: null,
+  email: 'alex.wong@example.com',
+  tel: '+1234567890',
+  avatar: null,
+  is_admin: true,
+  nickname: 'AlexW',
+}
+
 /* Seed Post*/
 proxy.post[1] = {
   user_id: 1,
@@ -59,8 +89,3 @@ proxy.post[3] = {
   created_at: '23May2025 09:15',
   updated_at: '23May2025 09:15',
 }
-
-console.log(
-  'request methods:',
-  proxy.method.map(row => row.method),
-)
