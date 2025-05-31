@@ -111,14 +111,15 @@ export type Post = {
   username: null | string
   user_id: null | number
   user?: User
-  title: string
+  description: string
   content: string
+  title: string
   tags: string
   like_count: number
   comment_count: number
   created_at: string
   updated_at: string
-  photo_url: string
+  photo_url: null | string
 }
 
 export type Response = {
