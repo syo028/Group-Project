@@ -57,6 +57,7 @@ ion-title {
   line-height: 1.3;
 }
 
+
 .post-content-info {
   display: flex;
   flex-direction: column;
@@ -92,6 +93,12 @@ ion-title {
   margin-bottom: 16px;
   --padding-start: 0;
   --inner-padding-end: 0;
+}
+
+.show-tags {
+  font-size: 12px;
+  margin-top: 4px;
+  
 }
 `)
 
@@ -201,8 +208,10 @@ function postsList() {
                   <span>{post.comment_count}</span>
                 </div>
               </div>
-              <div class="post-content-Title">{post.title}</div>
+              <div class="post-content-Title">{post.content}</div>
               <img src={post.photo_url} alt="post image" class="post-photo" />
+              <p></p>
+              <div className="show-tags">{post.tags}</div>
               <div class="post-timestamp">created at: {post.created_at}</div>
             </div>
           </Link>

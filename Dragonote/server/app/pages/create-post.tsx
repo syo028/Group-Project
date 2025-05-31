@@ -15,10 +15,9 @@ import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
 import { getAuthUser } from '../auth/user.js'
 import { evalLocale, Locale } from '../components/locale.js'
+import { proxy } from '../../../db/proxy.js'
 
-let pageTitle = (
-  <Locale en="Create Post" zh_hk="Create Post" zh_cn="Create Post" />
-)
+let pageTitle = <Locale en="Create Post" zh_hk="所有貼文" zh_cn="Create Post" />
 let addPageTitle = (
   <Locale en="Add Create Post" zh_hk="添加貼文" zh_cn="添加貼文" />
 )
@@ -41,25 +40,22 @@ let page = (
       </ion-toolbar>
     </ion-header>
     <ion-content id="CreatePost" class="ion-padding">
-      Items
+      <h2>所有貼文 (共 {proxy.post.length} 篇)</h2>
       <Main />
     </ion-content>
   </>
 )
 
-let items = [
-  { title: 'Android', slug: 'md' },
-  { title: 'iOS', slug: 'ios' },
-]
-
 function Main(attrs: {}, context: Context) {
+  let items = proxy.post
   let user = getAuthUser(context)
   return (
     <>
       <ion-list>
         {mapArray(items, item => (
           <ion-item>
-            {item.title} ({item.slug})
+            {item.username} <br />
+            {item.content}
           </ion-item>
         ))}
       </ion-list>
@@ -100,9 +96,18 @@ let addPage = (
       >
         <ion-list>
           <ion-item>
+            <ion-select aria-label="Tags" placeholder="Select Tag">
+              <ion-select-option value="時尚穿搭">時尚穿搭</ion-select-option>
+              <ion-select-option value="美食">美食</ion-select-option>
+              <ion-select-option value="旅行">旅行</ion-select-option>
+              <ion-select-option value="運動">運動</ion-select-option>
+            </ion-select>
+          </ion-item>
+
+          <ion-item>
             <ion-input
               name="title"
-              label="Title*:"
+              label="標題:"
               label-placement="floating"
               required
               minlength="3"
@@ -113,7 +118,7 @@ let addPage = (
           <ion-item>
             <ion-input
               name="slug"
-              label="Slug*: (unique url)"
+              label="圖片: (unique url)"
               label-placement="floating"
               required
               pattern="(\w|-|\.){1,32}"
@@ -122,6 +127,15 @@ let addPage = (
           <p class="hint">
             (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
           </p>
+          <div>
+            <ion-item>
+              <ion-input
+                name="description"
+                label="內文: "
+                label-placement="floating"
+              />
+            </ion-item>
+          </div>
         </ion-list>
         <div style="margin-inline-start: 1rem">
           <ion-button type="submit">Submit</ion-button>

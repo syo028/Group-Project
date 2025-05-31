@@ -53,12 +53,12 @@ proxy.user[3] = {
 /* Seed Post*/
 proxy.post[1] = {
   user_id: 1,
-  title: 'Post 1',
+  title: `Fruit of the King`,
   username: 'John Doe',
   content: `This is an apple.`,
   like_count: 10,
   comment_count: 5,
-  tags: 'tag1, tag2, tag3',
+  tags: `Food`,
   photo_url: 'https://picsum.photos/200',
   created_at: '21May2025 11:00',
   updated_at: '21May2025 11:00',
@@ -66,12 +66,12 @@ proxy.post[1] = {
 
 proxy.post[2] = {
   user_id: 2,
-  title: 'Sunset Adventure',
+  title: `Sunset Adventure`,
   username: 'Jane Smith',
   content: `Chasing sunsets at the beach! 🌅`,
   like_count: 25,
   comment_count: 8,
-  tags: 'sunset, beach, travel',
+  tags: `Travel`,
   photo_url: 'https://picsum.photos/201',
   created_at: '22May2025 18:30',
   updated_at: '22May2025 18:30',
@@ -79,12 +79,12 @@ proxy.post[2] = {
 
 proxy.post[3] = {
   user_id: 3,
-  title: 'Coffee Break',
+  title: `Coffee Break`,
   username: 'Alex Wong',
   content: `Nothing beats a morning coffee. ☕ #WorkFromHome`,
   like_count: 15,
   comment_count: 3,
-  tags: 'coffee, morning, wfh',
+  tags: `Food`,
   photo_url: 'https://picsum.photos/202',
   created_at: '23May2025 09:15',
   updated_at: '23May2025 09:15',
