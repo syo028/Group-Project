@@ -1,4 +1,0 @@
-user=node
-host=Dragonote.cc
-root_dir=/home/node/workspace/github.com/cute_/Dragonote
-pm2_name="Dragonote"
