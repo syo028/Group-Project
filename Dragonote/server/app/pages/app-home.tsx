@@ -1,6 +1,7 @@
 import { proxy } from '../../../db/proxy.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { title } from '../../config.js'
+import { toRouteUrl } from '../../url.js'
 import { getAuthUser } from '../auth/user.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
@@ -9,11 +10,13 @@ import { Link } from '../components/router.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
 import { wsStatus } from '../components/ws-status.js'
+import { Context } from '../context.js'
 import { prerender } from '../jsx/html.js'
 import { o } from '../jsx/jsx.js'
 import { PageRoute, Routes } from '../routes.js'
 import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { characters } from './app-character.js'
+import CreatePost from './create-post.js'
 
 let pageTitle = 'Home'
 
@@ -161,12 +164,16 @@ let homePage = (
   </>
 )
 
-function CreateSection(attrs: {}, context: any) {
+function CreateSection(attrs: {}, context: Context) {
   let user = getAuthUser(context)
+
   return (
     <>
-      <div class="ion-text-center">
-        <IonButton url="/post/create" disabled={!user ? true : undefined}>
+      <div className="ion-text-center">
+        <IonButton
+          url={toRouteUrl(CreatePost.routes, '/create-post/add')}
+          disabled={user ? true : undefined}
+        >
           Create Your New Post
         </IonButton>
       </div>
