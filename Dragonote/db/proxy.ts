@@ -106,6 +106,28 @@ export type ContentReport = {
   reject_time: null | number
 }
 
+export type Post = {
+  id?: null | number
+  username: null | string
+  user_id: null | number
+  user?: User
+  content: string
+  like_count: number
+  comment_count: number
+  created_at: string
+  updated_at: string
+  photo_url: string
+}
+
+export type Response = {
+  id?: null | number
+  username: null | string
+  user_id: null | number
+  user?: User
+  content: string
+  created_at: string
+}
+
 export type DBProxy = {
   method: Method[]
   url: Url[]
@@ -119,6 +141,8 @@ export type DBProxy = {
   verification_attempt: VerificationAttempt[]
   verification_code: VerificationCode[]
   content_report: ContentReport[]
+  post: Post[]
+  response: Response[]
 }
 
 export let proxy = proxySchema<DBProxy>({
@@ -154,6 +178,14 @@ export let proxy = proxySchema<DBProxy>({
       /* foreign references */
       ['reporter', { field: 'reporter_id', table: 'user' }],
       ['reviewer', { field: 'reviewer_id', table: 'user' }],
+    ],
+    post: [
+      /* foreign references */
+      ['user', { field: 'user_id', table: 'user' }],
+    ],
+    response: [
+      /* foreign references */
+      ['user', { field: 'user_id', table: 'user' }],
     ],
   },
 })

@@ -121,22 +121,47 @@ accept_time integer NULL
 reject_time integer NULL
 
 
-# zoom: 1.000
-# view: (0, 0)
+post
+----
+id integer PK
+username varchar(32) NULL
+user_id integer NULL FK >0- user.id
+content text
+like_count INTEGER
+comment_count INTEGER
+created_at DATETIME
+updated_at DATETIME
+photo_url text
+
+
+response
+--------
+id integer PK
+username varchar(32) NULL
+user_id integer NULL FK >0- user.id
+content text
+created_at DATETIME
+
+
+# zoom: 0.478
+# view: (-9, 2)
 # text-bg: #6495ed
 # text-color: #000000
 # diagram-bg: #f5f5f5
 # diagram-text: #000000
 # table-bg: #ffffff
 # table-text: #000000
-# request_log (50, 120)
-# method (450, 15)
-# url (450, 130)
-# user_agent (450, 245)
-# ua_type (845, 250)
-# ua_bot (845, 410)
-# ua_stat (715, 60)
-# request_session (450, 445)
-# user (450, 680)
-# verification_code (50, 550)
-# verification_attempt (50, 372)
+# request_log (29, 99)
+# method (536, 56)
+# url (409, 89)
+# user_agent (496, 105)
+# ua_type (605, 271)
+# ua_bot (424, 340)
+# ua_stat (295, 15)
+# request_session (150, 214)
+# user (549, 442)
+# verification_code (50, 429)
+# verification_attempt (50, 312)
+# content_report (258, 355)
+# post (388, 531)
+# response (240, 567)
