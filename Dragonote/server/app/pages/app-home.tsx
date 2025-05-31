@@ -1,3 +1,4 @@
+import { proxy } from '../../../db/proxy.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { title } from '../../config.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
@@ -13,45 +14,6 @@ import { fitIonFooter, selectIonTab } from '../styles/mobile-style.js'
 import { characters } from './app-character.js'
 
 let pageTitle = 'Home'
-
-let posts = [
-  {
-    id: 1,
-    username: 'John Doe',
-    title: 'Post 1',
-    description: `This is an apple.`,
-    likes: 10,
-    comments: 5,
-    tags: ['tag1', 'tag2', 'tag3'],
-    photos: 'https://picsum.photos/200',
-    created_at: '21May2025 11:00',
-    updated_at: '21May2025 11:00',
-  },
-  {
-    id: 2,
-    username: 'Jane Doe',
-    title: 'Post 2',
-    description: `This is an apple.`,
-    likes: 20,
-    comments: 10,
-    tags: ['tag4', 'tag5', 'tag6'],
-    photos: 'https://picsum.photos/200',
-    created_at: '21May2025 11:00',
-    updated_at: '21May2025 11:00',
-  },
-  {
-    id: 3,
-    username: 'John Smith',
-    title: 'Post 3',
-    description: `This is an apple.`,
-    likes: 30,
-    comments: 15,
-    tags: ['tag7', 'tag8', 'tag9'],
-    photos: 'https://picsum.photos/200',
-    created_at: '21May2025 11:00',
-    updated_at: '21May2025 11:00',
-  },
-]
 
 let style = Style(/* css */ `
 /* This explicit height is necessary when using ion-menu */
@@ -169,8 +131,43 @@ let homePage = (
     </ion-header>
 
     <ion-content class="ion-padding">
-      <p>Total number of posts: {posts.length}</p>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: '20px',
+        }}
+      >
+        <img
+          src="/logo.png.jpeg"
+          alt="logo"
+          style={{
+            margin: 'auto',
+            height: '10px',
+            width: '10px',
+          }}
+        />
+      </div>
+      <hr />
+      {postsList()}
+    </ion-content>
 
+    <ion-footer>
+      {appIonTabBar}
+      {selectIonTab('home')}
+    </ion-footer>
+    {fitIonFooter}
+    {script}
+  </>
+)
+
+function postsList() {
+  let posts = proxy.post
+  if (posts.length == 0) {
+    return <p>No Any Post</p>
+  }
+  return (
+    <>
       <ion-list>
         {mapArray(posts, post => (
           <Link tagName="ion-item" href={'/post/' + post.id} class="post-row">
@@ -191,17 +188,9 @@ let homePage = (
           </Link>
         ))}
       </ion-list>
-    </ion-content>
-
-    <ion-footer>
-      {appIonTabBar}
-      {selectIonTab('home')}
-    </ion-footer>
-    {fitIonFooter}
-    {script}
-  </>
-)
-
+    </>
+  )
+}
 // pre-render into html to reduce time to first contentful paint (FCP)
 homePage = prerender(homePage)
 
