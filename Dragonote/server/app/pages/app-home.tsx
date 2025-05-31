@@ -1,8 +1,10 @@
 import { proxy } from '../../../db/proxy.js'
 import { loadClientPlugin } from '../../client-plugin.js'
 import { title } from '../../config.js'
+import { getAuthUser } from '../auth/user.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
+import { IonButton } from '../components/ion-button.js'
 import { Link } from '../components/router.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
@@ -117,14 +119,8 @@ let homePage = (
           Droganote
         </ion-title>
         <ion-buttons slot="end">
-          <Link
-            tagName="ion-button"
-            href="/login"
-            fill="block"
-            color="primary"
-            class="ion-margin-top"
-          >
-            Login
+          <Link tagName="ion-button" href="/login" class="ion-margin-top">
+            Login{' '}
           </Link>
         </ion-buttons>
       </ion-toolbar>
@@ -148,7 +144,9 @@ let homePage = (
           }}
         />
       </div>
-      <h2>Welcome !</h2>
+      <h2 class="ion-text-center">Welcome!</h2>
+
+      <CreateSection />
 
       <hr />
       {postsList()}
@@ -162,6 +160,19 @@ let homePage = (
     {script}
   </>
 )
+
+function CreateSection(attrs: {}, context: any) {
+  let user = getAuthUser(context)
+  return (
+    <>
+      <div class="ion-text-center">
+        <IonButton url="/post/create" disabled={!user ? true : undefined}>
+          Create Your New Post
+        </IonButton>
+      </div>
+    </>
+  )
+}
 
 function postsList() {
   let posts = proxy.post
