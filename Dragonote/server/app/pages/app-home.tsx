@@ -57,7 +57,6 @@ ion-title {
   line-height: 1.3;
 }
 
-
 .post-content-info {
   display: flex;
   flex-direction: column;
@@ -70,8 +69,25 @@ ion-title {
 .post-header {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   margin-bottom: 4px;
+}
+
+.post-tags {
+  font-size:12px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background-color: var(--ion-color-light);
+  color: var(--ion-color-medium);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  white-space: nowrap;
 }
 
 .post-photo {
@@ -98,7 +114,6 @@ ion-title {
 .show-tags {
   font-size: 12px;
   margin-top: 4px;
-  
 }
 `)
 
@@ -208,10 +223,13 @@ function postsList() {
                   <span>{post.comment_count}</span>
                 </div>
               </div>
+
               <div class="post-content-Title">{post.content}</div>
+
               <img src={post.photo_url} alt="post image" class="post-photo" />
               <p></p>
-              <div className="show-tags">{post.tags}</div>
+              <div class="post-tags">{post.tags}</div>
+
               <div class="post-timestamp">created at: {post.created_at}</div>
             </div>
           </Link>

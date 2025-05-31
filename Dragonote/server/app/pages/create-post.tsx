@@ -96,7 +96,7 @@ let addPage = (
       >
         <ion-list>
           <ion-item>
-            <ion-select aria-label="Tags" placeholder="Select Tag">
+            <ion-select aria-label="TagsLabel" placeholder="Select Tag">
               <ion-select-option value="時尚穿搭">時尚穿搭</ion-select-option>
               <ion-select-option value="美食">美食</ion-select-option>
               <ion-select-option value="旅行">旅行</ion-select-option>
