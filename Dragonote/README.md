@@ -6,6 +6,8 @@ See [help.txt](help.txt) to get started.
 
 add comment function in post-detail.tsx
 add comment count
+erd.text > reponse
+
 add like count function
 
 add search post with tag
