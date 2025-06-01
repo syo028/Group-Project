@@ -136,7 +136,6 @@ photo_url text NULL
 response
 --------
 id integer PK
-username varchar(32) NULL
 user_id integer NULL FK >0- user.id
 content text
 

@@ -120,7 +120,6 @@ export type Post = {
 
 export type Response = {
   id?: null | number
-  username: null | string
   user_id: null | number
   user?: User
   content: string
