@@ -20,13 +20,7 @@ export let PostCardStyle = Style(/* css */ `
     gap: 8px;
   }
   
-  .post-content-Title {
-    font-size: 20px;
-    font-weight: bold;
-    color: #222;
-    margin-top: 2px;
-    line-height: 1.3;
-  }
+
   
   .post-content-info {
     display: flex;
@@ -45,12 +39,16 @@ export let PostCardStyle = Style(/* css */ `
     margin-bottom: 4px;
   }
   
-  .post-tags {
-    font-size:12px;
-    display: flex;
-    gap: 4px;
-    flex-wrap: wrap;
-  }
+    .post-tags {
+      background-color: #007BFF; /* blue fill */
+      color: white;              /* text color */
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      user-select: none;
+    }
+
   
   .tag {
     background-color: var(--ion-color-light);
@@ -95,15 +93,14 @@ export function PostCard(attrs: { post: Post }) {
           </div>
         </div>
 
-        <div class="post-content-Title">{post.content}</div>
-
+        <div class="post-header">
+          <div class="post-content-Title">{post.title}</div>
+          <div class="post-tags">{post.tags}</div>
+        </div>
         {post.photo_url && (
           <img src={post.photo_url} alt="post image" class="post-photo" />
         )}
         <p></p>
-        <div class="post-tags">
-          x:{post.id}, {post.title}, {post.tags}
-        </div>
 
         <div class="post-timestamp">created at: {post.created_at}</div>
       </div>
