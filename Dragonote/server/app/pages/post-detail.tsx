@@ -65,6 +65,11 @@ function Main(attrs: {}, context: DynamicContext) {
       <Page id="PostDetail" title={post.title}>
         <PostCard post={post} />
         <section>
+          <br />
+          <p>
+            <h2>Description:</h2>
+          </p>
+          <p>{post.content}</p>
           <h2>add comment</h2>
           TODO
         </section>
