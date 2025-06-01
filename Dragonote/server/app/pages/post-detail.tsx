@@ -16,58 +16,56 @@ import { renderError } from '../components/error.js'
 import { getAuthUser } from '../auth/user.js'
 import { evalLocale, Locale } from '../components/locale.js'
 import { proxy } from '../../../db/proxy.js'
+import { Page } from '../components/page.js'
+import PostCard, {
+  PostCardScript,
+  PostCardStyle,
+} from '../components/post-card.js'
 
-let pageTitle = <Locale en="Create Post" zh_hk="所有貼文" zh_cn="Create Post" />
+let pageTitle = (
+  <Locale en="Post Detail" zh_hk="Post Detail" zh_cn="Post Detail" />
+)
 let addPageTitle = (
-  <Locale en="Add Create Post" zh_hk="添加貼文" zh_cn="添加貼文" />
+  <Locale
+    en="Add Post Detail"
+    zh_hk="添加Post Detail"
+    zh_cn="添加Post Detail"
+  />
 )
 
 let style = Style(/* css */ `
-#CreatePost {
+#PostDetail {
 
 }
 `)
 
-let page = (context: DynamicContext) => (
-  <>
-    {style}
-    <ion-header>
-      <ion-toolbar>
-        <IonBackButton href="/" backText="Home" />
-        <ion-title role="heading" aria-level="1">
-          {pageTitle}
-        </ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content id="CreatePost" class="ion-padding">
-      <h2>所有貼文 (共 {proxy.post.length} 篇)</h2>
-      <Main />
-    </ion-content>
-  </>
-)
+let items = [
+  { title: 'Android', slug: 'md' },
+  { title: 'iOS', slug: 'ios' },
+]
 
 function Main(attrs: {}, context: DynamicContext) {
-  let items = proxy.post
+  let post_id = context.routerMatch?.params.id
+  let post = proxy.post[post_id]
   let user = getAuthUser(context)
+  if (!post) {
+    return (
+      <Page id="PostDetail" title={'Post not found'}>
+        <p>The post may be deleted or not found.</p>
+        <Link href="/" tagName="ion-button">
+          Back to Home
+        </Link>
+      </Page>
+    )
+  }
   return (
     <>
-      <ion-list>
-        {mapArray(items, item => (
-          <ion-item>
-            {item.user?.username} <br />
-            {item.content}
-          </ion-item>
-        ))}
-      </ion-list>
-      {user ? (
-        <Link href="/create-post/add" tagName="ion-button">
-          {addPageTitle}
-        </Link>
-      ) : (
-        <p>
-          You can add create post after <Link href="/register">register</Link>.
-        </p>
-      )}
+      {PostCardStyle}
+      {style}
+      <Page id="PostDetail" title={post.title}>
+        <PostCard post={post} />
+      </Page>
+      {PostCardScript}
     </>
   )
 }
@@ -75,39 +73,30 @@ function Main(attrs: {}, context: DynamicContext) {
 let addPage = (
   <>
     {Style(/* css */ `
-#AddCreatePost .hint {
+#AddPostDetail .hint {
   margin-inline-start: 1rem;
   margin-block: 0.25rem;
 }
 `)}
     <ion-header>
       <ion-toolbar>
-        <IonBackButton href="/" backText="Home" />
+        <IonBackButton href="/post-detail" backText={pageTitle} />
         <ion-title role="heading" aria-level="1">
           {addPageTitle}
         </ion-title>
       </ion-toolbar>
     </ion-header>
-    <ion-content id="AddCreatePost" class="ion-padding">
+    <ion-content id="AddPostDetail" class="ion-padding">
       <form
         method="POST"
-        action="/create-post/add/submit"
+        action="/post-detail/add/submit"
         onsubmit="emitForm(event)"
       >
         <ion-list>
           <ion-item>
-            <ion-select name="tags" label="標籤:" required>
-              <ion-select-option value="Travel">Travel</ion-select-option>
-              <ion-select-option value="Food">Food</ion-select-option>
-              <ion-select-option value="Tech">Tech</ion-select-option>
-              <ion-select-option value="Life">Life</ion-select-option>
-              <ion-select-option value="Other">Other</ion-select-option>
-            </ion-select>
-          </ion-item>
-          <ion-item>
             <ion-input
               name="title"
-              label="標題:"
+              label="Title*:"
               label-placement="floating"
               required
               minlength="3"
@@ -117,20 +106,16 @@ let addPage = (
           <p class="hint">(3-50 characters)</p>
           <ion-item>
             <ion-input
-              name="photo_url"
-              label="Photo: (unique url)"
+              name="slug"
+              label="Slug*: (unique url)"
               label-placement="floating"
+              required
+              pattern="(\w|-|\.){1,32}"
             />
           </ion-item>
-          <div>
-            <ion-item>
-              <ion-input
-                name="content"
-                label="內文: "
-                label-placement="floating"
-              />
-            </ion-item>
-          </div>
+          <p class="hint">
+            (1-32 characters of: <code>a-z A-Z 0-9 - _ .</code>)
+          </p>
         </ion-list>
         <div style="margin-inline-start: 1rem">
           <ion-button type="submit">Submit</ion-button>
@@ -153,10 +138,8 @@ function AddPage(attrs: {}, context: DynamicContext) {
 }
 
 let submitParser = object({
-  tags: string(),
   title: string({ minLength: 3, maxLength: 50 }),
-  content: string(),
-  photo_url: string(),
+  slug: string({ match: /^[\w-]{1,32}$/ }),
 })
 
 function Submit(attrs: {}, context: DynamicContext) {
@@ -165,24 +148,17 @@ function Submit(attrs: {}, context: DynamicContext) {
     if (!user) throw 'You must be logged in to submit ' + pageTitle
     let body = getContextFormBody(context)
     let input = submitParser.parse(body)
-
-    let id = proxy.post.push({
-      user_id: user.id!,
-      tags: input.tags,
+    let id = items.push({
       title: input.title,
-      content: input.content,
-      like_count: 0,
-      comment_count: 0,
-      photo_url: input.photo_url || null,
+      slug: input.slug,
     })
-
-    return <Redirect href={`/create-post/result?id=${id}`} />
+    return <Redirect href={`/post-detail/result?id=${id}`} />
   } catch (error) {
     throwIfInAPI(error, '#add-message', context)
     return (
       <Redirect
         href={
-          '/create-post/result?' + new URLSearchParams({ error: String(error) })
+          '/post-detail/result?' + new URLSearchParams({ error: String(error) })
         }
       />
     )
@@ -197,19 +173,19 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
     <>
       <ion-header>
         <ion-toolbar>
-          <IonBackButton href="/create-post/add" backText="Form" />
+          <IonBackButton href="/post-detail/add" backText="Form" />
           <ion-title role="heading" aria-level="1">
             Submitted {pageTitle}
           </ion-title>
         </ion-toolbar>
       </ion-header>
-      <ion-content id="AddCreatePost" class="ion-padding">
+      <ion-content id="AddPostDetail" class="ion-padding">
         {error ? (
           renderError(error, context)
         ) : (
           <>
             <p>Your submission is received (#{id}).</p>
-            <Link href="/create-post" tagName="ion-button">
+            <Link href="/post-detail" tagName="ion-button">
               Back to {pageTitle}
             </Link>
           </>
@@ -220,30 +196,29 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
 }
 
 let routes = {
-  '/create-post': {
-    resolve(context: DynamicContext) {
+  '/post/:id': {
+    resolve(context) {
       let t = evalLocale(pageTitle, context)
       return {
         title: title(t),
         description: 'TODO',
-        node: page(context),
-        streaming: false,
+        node: <Main />,
       }
     },
   },
-  '/create-post/add': {
+  '/post-detail/add': {
     title: title(addPageTitle),
     description: 'TODO',
     node: <AddPage />,
     streaming: false,
   },
-  '/create-post/add/submit': {
+  '/post-detail/add/submit': {
     title: apiEndpointTitle,
     description: 'TODO',
     node: <Submit />,
     streaming: false,
   },
-  '/create-post/result': {
+  '/post-detail/result': {
     title: apiEndpointTitle,
     description: 'TODO',
     node: <SubmitResult />,

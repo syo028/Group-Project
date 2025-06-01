@@ -1,3 +1,4 @@
+import PostDetail from './pages/post-detail.js'
 import CreatePost from './pages/create-post.js'
 import ReportContent from './pages/report-content.js'
 import AppNotice from './pages/app-notice.js'
@@ -78,6 +79,7 @@ export type Routes = Record<string, PageRoute>
 
 // TODO direct support alternative urls instead of having to repeat the entry
 let routeDict = {
+  ...PostDetail.routes,
   ...CreatePost.routes,
   ...ReportContent.routes,
   ...DemoPlugin.routes,

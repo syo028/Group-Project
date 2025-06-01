@@ -6,6 +6,10 @@ import { getAuthUser } from '../auth/user.js'
 import { appIonTabBar } from '../components/app-tab-bar.js'
 import { mapArray } from '../components/fragment.js'
 import { IonButton } from '../components/ion-button.js'
+import PostCard, {
+  PostCardScript,
+  PostCardStyle,
+} from '../components/post-card.js'
 import { Link } from '../components/router.js'
 import { Script } from '../components/script.js'
 import Style from '../components/style.js'
@@ -34,76 +38,6 @@ ion-title {
   margin: 0 auto;
 }
 
-.post-stats {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  margin-left: auto;
-}
-
-.post-content-Name {
-  font-size: 15px;
-  color: var(--ion-color-primary);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.post-content-Title {
-  font-size: 20px;
-  font-weight: bold;
-  color: #222;
-  margin-top: 2px;
-  line-height: 1.3;
-}
-
-.post-content-info {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 2px;
-  margin-top: 15px;
-  width: 100%;
-}
-
-.post-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  margin-bottom: 4px;
-}
-
-.post-tags {
-  font-size:12px;
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.tag {
-  background-color: var(--ion-color-light);
-  color: var(--ion-color-medium);
-  padding: 2px 8px;
-  border-radius: 12px;
-  font-size: 12px;
-  white-space: nowrap;
-}
-
-.post-photo {
-  width: 100%;
-  height: auto;
-  max-width: 400px;
-  border-radius: 8px;
-  margin-top: 10px;
-  display: block;
-}
-
-.post-timestamp {
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
-}
 
 .post-row {
   margin-bottom: 16px;
@@ -134,6 +68,7 @@ let sweetAlertPlugin = loadClientPlugin({
 
 let homePage = (
   <>
+    {PostCardStyle}
     {style}
     <ion-header>
       <ion-toolbar color="primary">
@@ -183,6 +118,7 @@ let homePage = (
     </ion-footer>
     {fitIonFooter}
     {script}
+    {PostCardScript}
   </>
 )
 
@@ -213,25 +149,7 @@ function postsList() {
       <ion-list>
         {mapArray(posts, post => (
           <Link tagName="ion-item" href={'/post/' + post.id} class="post-row">
-            <div class="post-content-info">
-              <div class="post-header">
-                <div class="post-content-Name">
-                  <strong>{post.username}</strong>
-                  <ion-icon name="heart-outline"></ion-icon>
-                  <span>{post.like_count}</span>
-                  <ion-icon name="chatbubble-outline"></ion-icon>
-                  <span>{post.comment_count}</span>
-                </div>
-              </div>
-
-              <div class="post-content-Title">{post.content}</div>
-
-              <img src={post.photo_url} alt="post image" class="post-photo" />
-              <p></p>
-              <div class="post-tags">{post.tags}</div>
-
-              <div class="post-timestamp">created at: {post.created_at}</div>
-            </div>
+            <PostCard post={post} />
           </Link>
         ))}
       </ion-list>

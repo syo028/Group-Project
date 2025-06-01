@@ -108,18 +108,13 @@ export type ContentReport = {
 
 export type Post = {
   id?: null | number
-  username: null | string
   user_id: null | number
   user?: User
-  description: string
-  content: string
-  title: string
   tags: string
+  title: string
+  content: string
   like_count: number
   comment_count: number
-  slug: null | string
-  created_at: string
-  updated_at: string
   photo_url: null | string
 }
 
@@ -129,7 +124,6 @@ export type Response = {
   user_id: null | number
   user?: User
   content: string
-  created_at: string
 }
 
 export type DBProxy = {
