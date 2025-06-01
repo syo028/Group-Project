@@ -64,15 +64,16 @@ function Main(attrs: {}, context: DynamicContext) {
       {style}
       <Page id="PostDetail" title={post.title}>
         <PostCard post={post} />
-        <section>
-          <br />
-          <p>
-            <h2>Description:</h2>
-          </p>
-          <p>{post.content}</p>
-          <h2>add comment</h2>
-          TODO
-        </section>
+        <ion-content>
+          <ion-list>
+            <br />
+            <p>
+              <h2>Description:</h2>
+            </p>
+            <p>{post.content}</p>
+            <h2>add comment</h2>
+          </ion-list>
+        </ion-content>
       </Page>
 
       {PostCardScript}
