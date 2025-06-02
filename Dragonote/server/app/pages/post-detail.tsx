@@ -35,6 +35,9 @@ let addPageTitle = (
 
 let style = Style(/* css */ `
 #PostDetail {
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
 
 }
 `)
@@ -48,6 +51,7 @@ function Main(attrs: {}, context: DynamicContext) {
   let post_id = context.routerMatch?.params.id
   let post = proxy.post[post_id]
   let user = getAuthUser(context)
+  let response = proxy.response[post_id]
   if (!post) {
     return (
       <Page id="PostDetail" title={'Post not found'}>
@@ -71,10 +75,39 @@ function Main(attrs: {}, context: DynamicContext) {
               <h2>Description:</h2>
             </p>
             <p>{post.content}</p>
-            <h2>add comment</h2>
+
+            <ion-card>
+              <ion-card-header>
+                <ion-card-title>Comments</ion-card-title>
+                <ion-card-subtitle>{response}</ion-card-subtitle>{' '}
+              </ion-card-header>
+
+              <ion-card-content>
+                Here's a small text description for the card content. Nothing
+                more, nothing less.
+              </ion-card-content>
+
+              <ion-button fill="clear">Action 1</ion-button>
+              <ion-button fill="clear">Action 2</ion-button>
+            </ion-card>
           </ion-list>
         </ion-content>
       </Page>
+      <ion-footer>
+        <ion-item>
+          <ion-input
+            label="Add comment"
+            className="text-xl"
+            label-placement="stacked"
+            placeholder="Enter text"
+          ></ion-input>
+          <ion-icon
+            slot="end"
+            name="paper-plane"
+            style={{ fontSize: '24px', marginLeft: '10px' }}
+          />
+        </ion-item>
+      </ion-footer>
 
       {PostCardScript}
     </>
