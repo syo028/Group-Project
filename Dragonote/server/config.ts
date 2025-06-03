@@ -17,7 +17,7 @@ export let config = {
   production,
   development,
   site_name: 'Dragonote',
-  short_site_name: 'D',
+  short_site_name: 'Dragonote',
   site_description: 'Demo website of ts-liveview',
   setup_robots_txt: false,
   epoch,

@@ -46,7 +46,19 @@ let LoginPage = (
       backColor="light"
       headerColor="primary"
     >
-      <p>Welcome back to {config.short_site_name}!</p>
+      <p style="text-align: center">
+        Welcome back to {config.short_site_name}!
+      </p>
+      <div style="display: flex; justify-content: center; align-items: center; margin: 1rem 0">
+        <img
+          src="/little_dragon.png"
+          alt="little"
+          style={{
+            height: '0.412px',
+            width: '0.412px',
+          }}
+        />
+      </div>
       <Main />
       {sweetAlertPlugin.node}
       {wsStatus.safeArea}
@@ -133,22 +145,6 @@ let passwordFormBody = (
 
 let guestView = (
   <>
-    {config.use_social_login && (
-      <>
-        <div class="separator-line flex-center">Login with social network</div>
-        <div class="flex-center flex-column">{oauthProviderList}</div>
-      </>
-    )}
-    {(config.enable_email || config.enable_sms) && (
-      <>
-        <div class="separator-line flex-center">
-          Login with verification code
-        </div>
-        <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
-          {verifyFormBody}
-        </form>
-      </>
-    )}
     <div class="separator-line flex-center">Login with password</div>
     <form method="post" action="/login/submit">
       {passwordFormBody}
