@@ -71,43 +71,60 @@ function Main(attrs: {}, context: DynamicContext) {
         <ion-content>
           <ion-list>
             <br />
-            <p>
-              <h2>Description:</h2>
-            </p>
-            <p>{post.content}</p>
+            <p></p>
+            <p></p>
 
             <ion-card>
               <ion-card-header>
-                <ion-card-title>Comments</ion-card-title>
-                <ion-card-subtitle>{response}</ion-card-subtitle>{' '}
+                <ion-card-title>
+                  <h2>Description:</h2>
+                </ion-card-title>
+                <ion-card-subtitle>{post.content}</ion-card-subtitle>
               </ion-card-header>
-
               <ion-card-content>
-                Here's a small text description for the card content. Nothing
-                more, nothing less.
-              </ion-card-content>
+                <ion-list>
+                  <p>Comments:</p>
+                  <ion-item>
+                    <ion-thumbnail slot="start">
+                      <ion-avatar>
+                        <img
+                          alt="Silhouette of a person's head"
+                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                        />
+                      </ion-avatar>
+                    </ion-thumbnail>
+                    <ion-label>Comment</ion-label>
+                  </ion-item>
 
-              <ion-button fill="clear">Action 1</ion-button>
-              <ion-button fill="clear">Action 2</ion-button>
+                  <ion-item>
+                    <ion-thumbnail slot="start">
+                      <ion-avatar>
+                        <img
+                          alt="Silhouette of a person's head"
+                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                        />
+                      </ion-avatar>
+                    </ion-thumbnail>
+                    <ion-label>Comment</ion-label>
+                  </ion-item>
+
+                  <ion-item lines="none">
+                    <ion-thumbnail slot="start">
+                      <ion-avatar>
+                        <img
+                          alt="Silhouette of a person's head"
+                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
+                        />
+                      </ion-avatar>
+                    </ion-thumbnail>
+                    <ion-label>Comment</ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-card-content>
             </ion-card>
           </ion-list>
         </ion-content>
       </Page>
-      <ion-footer>
-        <ion-item>
-          <ion-input
-            label="Add comment"
-            className="text-xl"
-            label-placement="stacked"
-            placeholder="Enter text"
-          ></ion-input>
-          <ion-icon
-            slot="end"
-            name="paper-plane"
-            style={{ fontSize: '24px', marginLeft: '10px' }}
-          />
-        </ion-item>
-      </ion-footer>
 
       {PostCardScript}
     </>
