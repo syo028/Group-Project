@@ -10,6 +10,8 @@ import { LanguageRadioGroup } from '../components/language-radio-group.js'
 import { Locale } from '../components/locale.js'
 import { Context } from '../context.js'
 import { getAuthUser } from '../auth/user.js'
+import { proxy } from '../../../db/proxy.js'
+import { find } from 'better-sqlite3-proxy'
 
 let pageTitle = 'More'
 
@@ -18,6 +20,18 @@ let style = Style(/* css */ `
 
 }
 `)
+
+function getDisplayName(user_id: number | null): string {
+  if (!user_id) return 'Little Dragon'
+  const user = find(proxy.user, { id: user_id })
+  if (!user) return 'Little Dragon'
+  return user.nickname || user.username || 'Little Dragon'
+}
+
+function DisplayName(_attrs: {}, context: Context) {
+  const user = getAuthUser(context)
+  return <p>{getDisplayName(user?.id || null)}</p>
+}
 
 let page = (
   <>
@@ -45,7 +59,8 @@ let page = (
           text-align:center;
         "
       >
-        {config.site_name}
+        <br />
+        Little Dragon <DisplayName />
       </h2>
       <ion-list>
         <ion-list-header aria-level="2">

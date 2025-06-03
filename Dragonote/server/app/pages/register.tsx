@@ -68,10 +68,8 @@ let RegisterPage = (
       backColor="light"
       headerColor="primary"
     >
-      <p>
-        Welcome to {config.short_site_name}!
-        <br />
-        Let's begin the adventure~
+      <p style="text-align: center">
+        Welcome to {config.short_site_name}! Let's begin the adventure~
       </p>
       <Main />
       {wsStatus.safeArea}
@@ -135,24 +133,6 @@ let verifyFormBody = (
 
 let guestView = (
   <>
-    {config.use_social_login && (
-      <>
-        <div class="separator-line flex-center">
-          Register with social network
-        </div>
-        <div class="flex-center flex-column">{oauthProviderList}</div>
-      </>
-    )}
-    {(config.enable_email || config.enable_sms) && (
-      <>
-        <div class="separator-line flex-center">
-          Register with verification code
-        </div>
-        <form method="POST" action="/verify/submit" onsubmit="emitForm(event)">
-          {verifyFormBody}
-        </form>
-      </>
-    )}
     <div class="separator-line flex-center">Register with password</div>
     <form
       id="verifyForm"
