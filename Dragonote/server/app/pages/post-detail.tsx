@@ -72,7 +72,17 @@ function Main(attrs: {}, context: DynamicContext) {
           <ion-list>
             <br />
             <p></p>
-            <p></p>
+            <div> Description:</div>
+            {post.content}
+
+            <div class="button-container">
+              <ion-button fill="clear">
+                <ion-icon name="heart-outline"></ion-icon>Like
+              </ion-button>
+              <ion-button fill="clear">
+                <ion-icon name="chatbubble-outline"></ion-icon>Add Comment
+              </ion-button>
+            </div>
 
             <CommentList />
           </ion-list>
