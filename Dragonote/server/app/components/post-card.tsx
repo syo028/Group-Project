@@ -73,6 +73,11 @@ export let PostCardStyle = Style(/* css */ `
     color: #666;
     margin-top: 4px;
   }
+
+  .button-container {
+    display: flex;
+    gap: 4px;
+  }
 `)
 
 export let PostCardScript = Script(/* js */ `
@@ -100,9 +105,19 @@ export function PostCard(attrs: { post: Post }) {
         {post.photo_url && (
           <img src={post.photo_url} alt="post image" class="post-photo" />
         )}
-        <p></p>
-
         <div class="post-timestamp">created at: {post.created_at}</div>
+        <p></p>
+        <div> Description:</div>
+        {post.content}
+
+        <div class="button-container">
+          <ion-button fill="clear">
+            <ion-icon name="heart-outline"></ion-icon>Like
+          </ion-button>
+          <ion-button fill="clear">
+            <ion-icon name="heart-outline"></ion-icon>Add Comment
+          </ion-button>
+        </div>
       </div>
     </>
   )
