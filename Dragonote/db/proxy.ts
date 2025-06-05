@@ -123,6 +123,7 @@ export type Response = {
   user_id: null | number
   user?: User
   content: string
+  created_at: number
 }
 
 export type DBProxy = {

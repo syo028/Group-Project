@@ -74,54 +74,7 @@ function Main(attrs: {}, context: DynamicContext) {
             <p></p>
             <p></p>
 
-            <ion-card>
-              <ion-card-header>
-                <ion-card-title>
-                  <h2>Description:</h2>
-                </ion-card-title>
-                <ion-card-subtitle>{post.content}</ion-card-subtitle>
-              </ion-card-header>
-              <ion-card-content>
-                <ion-list>
-                  <p>Comments:</p>
-                  <ion-item>
-                    <ion-thumbnail slot="start">
-                      <ion-avatar>
-                        <img
-                          alt="Silhouette of a person's head"
-                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                        />
-                      </ion-avatar>
-                    </ion-thumbnail>
-                    <ion-label>Comment</ion-label>
-                  </ion-item>
-
-                  <ion-item>
-                    <ion-thumbnail slot="start">
-                      <ion-avatar>
-                        <img
-                          alt="Silhouette of a person's head"
-                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                        />
-                      </ion-avatar>
-                    </ion-thumbnail>
-                    <ion-label>Comment</ion-label>
-                  </ion-item>
-
-                  <ion-item lines="none">
-                    <ion-thumbnail slot="start">
-                      <ion-avatar>
-                        <img
-                          alt="Silhouette of a person's head"
-                          src="https://ionicframework.com/docs/img/demos/avatar.svg"
-                        />
-                      </ion-avatar>
-                    </ion-thumbnail>
-                    <ion-label>Comment</ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-card-content>
-            </ion-card>
+            <CommentList />
           </ion-list>
         </ion-content>
       </Page>
@@ -191,6 +144,19 @@ let addPage = (
     </ion-content>
   </>
 )
+
+function CommentList() {
+  return (
+    <div id="commentList">
+      {mapArray(proxy.response, response => (
+        <ion-item>
+          <ion-thumbnail slot="start">{response.user_id}</ion-thumbnail>
+          <ion-label>{response.content}</ion-label>
+        </ion-item>
+      ))}
+    </div>
+  )
+}
 
 function AddPage(attrs: {}, context: DynamicContext) {
   let user = getAuthUser(context)
