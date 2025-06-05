@@ -21,6 +21,7 @@ import PostCard, {
   PostCardScript,
   PostCardStyle,
 } from '../components/post-card.js'
+import { validateUsername } from '../validate/user.js'
 
 let pageTitle = (
   <Locale en="Post Detail" zh_hk="Post Detail" zh_cn="Post Detail" />
@@ -72,19 +73,27 @@ function Main(attrs: {}, context: DynamicContext) {
           <ion-list>
             <br />
             <p></p>
-            <div> Description:</div>
+            <div style="color: var(--ion-color-primary)">Description:</div>
             {post.content}
-
-            <div class="button-container">
-              <ion-button fill="clear">
-                <ion-icon name="heart-outline"></ion-icon>Like
-              </ion-button>
-              <ion-button fill="clear">
-                <ion-icon name="chatbubble-outline"></ion-icon>Add Comment
-              </ion-button>
-            </div>
+            <p></p>
+            <div style="color: var(--ion-color-primary)">Comments:</div>
 
             <CommentList />
+
+            <div class="button-container">
+              <ion-list inset="true">
+                <ion-item>
+                  <ion-textarea
+                    label="Add Comment Here..."
+                    label-placement="floating"
+                    rows="1"
+                  ></ion-textarea>
+                  <ion-button slot="end" fill="clear">
+                    <ion-icon name="send-outline"></ion-icon>
+                  </ion-button>
+                </ion-item>
+              </ion-list>
+            </div>
           </ion-list>
         </ion-content>
       </Page>
@@ -160,8 +169,9 @@ function CommentList() {
     <div id="commentList">
       {mapArray(proxy.response, response => (
         <ion-item>
-          <ion-thumbnail slot="start">{response.user_id}</ion-thumbnail>
-          <ion-label>{response.content}</ion-label>
+          <ion-list>
+            {response.user?.username}:<ion-label>{response.content}</ion-label>
+          </ion-list>
         </ion-item>
       ))}
     </div>
