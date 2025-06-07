@@ -131,14 +131,12 @@ content text
 like_count integer
 comment_count integer
 photo_url text NULL
-photo_upload text NULL
 
 
 response
 --------
 id integer PK
 user_id integer NULL FK >0- user.id
-username text FK >0- user.username
 content text
 created_at integer
 

@@ -67,15 +67,6 @@ export let PostCardStyle = Style(/* css */ `
     margin-top: 10px;
     display: block;
   }
-
-  .post-upload-photo {
-    width: 100%;
-    height: auto;
-    max-width: 400px;
-    border-radius: 8px;
-    margin-top: 10px;
-    display: block;
-  }
   
   .post-timestamp {
     font-size: 12px;
@@ -114,13 +105,6 @@ export function PostCard(attrs: { post: Post }) {
         </div>
         {post.photo_url && (
           <img src={post.photo_url} alt="post image" class="post-photo" />
-        )}
-        {post.photo_upload && (
-          <img
-            src={post.photo_upload}
-            alt="post upload image"
-            class="post-upload-photo"
-          />
         )}
         <div class="post-timestamp">created at: {post.created_at}</div>
       </div>

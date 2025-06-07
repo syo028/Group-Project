@@ -59,7 +59,7 @@ proxy.post[1] = {
   like_count: 10,
   comment_count: 5,
   photo_url: 'https://picsum.photos/200',
-  photo_upload: null,
+
   // created_at: '21May2025 11:00',
   // updated_at: '21May2025 11:00',
 }
@@ -72,7 +72,6 @@ proxy.post[2] = {
   like_count: 25,
   comment_count: 8,
   photo_url: 'https://picsum.photos/201',
-  photo_upload: null,
 
   // created_at: '22May2025 18:30',
   // updated_at: '22May2025 18:30',
@@ -85,8 +84,7 @@ proxy.post[3] = {
   content: `Nothing beats a morning coffee. ☕ #WorkFromHome`,
   like_count: 15,
   comment_count: 3,
-  photo_url: null,
-  photo_upload: 'https://picsum.photos/202',
+  photo_url: 'https://picsum.photos/202',
 
   // created_at: '23May2025 09:15',
   // updated_at: '23May2025 09:15',
