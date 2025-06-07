@@ -47,7 +47,7 @@ export type UaStat = {
 
 export type User = {
   id?: null | number
-  username: string
+  username: null | string
   password_hash: null | string // char(60)
   email: null | string
   tel: null | string
@@ -116,12 +116,15 @@ export type Post = {
   like_count: number
   comment_count: number
   photo_url: null | string
+  photo_upload: null | string
 }
 
 export type Response = {
   id?: null | number
   user_id: null | number
   user?: User
+  
+  username?: User
   content: string
   created_at: number
 }
@@ -184,6 +187,7 @@ export let proxy = proxySchema<DBProxy>({
     response: [
       /* foreign references */
       ['user', { field: 'user_id', table: 'user' }],
+      ['username', { field: 'username', table: 'user' }],
     ],
   },
 })

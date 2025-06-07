@@ -131,6 +131,7 @@ content text
 like_count integer
 comment_count integer
 photo_url text NULL
+photo_upload text NULL
 
 
 response

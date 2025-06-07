@@ -122,6 +122,15 @@ let addPage = (
               label-placement="floating"
             />
           </ion-item>
+          <ion-item>
+            <ion-input
+              name="attach_photo"
+              type="file"
+              label="Attach Photo"
+              label-placement="floating"
+              accept="image/*"
+            />
+          </ion-item>
           <div>
             <ion-item>
               <ion-input
@@ -174,6 +183,7 @@ function Submit(attrs: {}, context: DynamicContext) {
       like_count: 0,
       comment_count: 0,
       photo_url: input.photo_url || null,
+      photo_upload: input.photo_upload || null,
     })
 
     return <Redirect href={`/create-post/result?id=${id}`} />
