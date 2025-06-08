@@ -1,14 +1,10 @@
 {
-  "name": "Dragonote",
+  "name": "dragonote",
   "version": "1.0.0",
   "type": "module",
-  "description": "",
+  "description": "Powered by [ts-liveview](https://github.com/beenotung/ts-liveview/blob/v5-auth-ionic-template/README.md)",
   "keywords": [],
-  "author": {
-    "name": "Beeno Tung",
-    "email": "aabbcc1241@yahoo.com.hk",
-    "url": "https://beeno-tung.surge.sh"
-  },
+  "author": "Beeno Tung <aabbcc1241@yahoo.com.hk> (https://beeno-tung.surge.sh)",
   "license": "BSD-2-Clause",
   "scripts": {
     "ui": "cd db && npm run ui",
@@ -100,5 +96,6 @@
     "populate-env": "^2.4.3",
     "prettier": "^3.5.3",
     "typescript": "^5.8.3"
-  }
+  },
+  "main": "index.js"
 }
