@@ -38,16 +38,40 @@ ion-title {
   margin: 0 auto;
 }
 
-
 .post-row {
   margin-bottom: 16px;
   --padding-start: 0;
   --inner-padding-end: 0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.post-row:hover {
+  transform: translateY(-2px);
 }
 
 .show-tags {
   font-size: 12px;
   margin-top: 4px;
+}
+
+.post-stats {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 8px;
+  color: var(--ion-color-medium);
+}
+
+.post-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.post-stat ion-icon {
+  font-size: 16px;
 }
 `)
 
@@ -150,6 +174,16 @@ function postsList() {
         {mapArray(posts, post => (
           <Link tagName="ion-item" href={'/post/' + post.id} class="post-row">
             <PostCard post={post} />
+            <div class="post-stats">
+              <div class="post-stat">
+                <ion-icon name="heart-outline"></ion-icon>
+                <span>{post.like_count}</span>
+              </div>
+              <div class="post-stat">
+                <ion-icon name="chatbubble-outline"></ion-icon>
+                <span>{post.comment_count}</span>
+              </div>
+            </div>
           </Link>
         ))}
       </ion-list>

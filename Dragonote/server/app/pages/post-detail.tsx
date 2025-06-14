@@ -38,9 +38,41 @@ let addPageTitle = (
 
 let style = Style(/* css */ `
 #PostDetail {
-.text-xl {
-  font-size: 1.25rem;
-  line-height: 1.75rem;
+  .text-xl {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+  }
+}
+
+.interaction-section {
+  margin: 20px 0;
+  padding: 16px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.comments-section {
+  margin-top: 24px;
+  padding: 16px;
+  background: var(--ion-color-light);
+  border-radius: 8px;
+}
+
+.comments-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: var(--ion-color-primary);
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.comments-header ion-icon {
+  font-size: 1.4rem;
 }
 `)
 
@@ -95,11 +127,16 @@ function Main(attrs: {}, context: DynamicContext) {
               />
             </div>
 
-            <div style="color: var(--ion-color-primary)">Comments:</div>
-            <CommentSection
-              postId={post.id}
-              onCommentCountChange={handleCommentCountChange}
-            />
+            <div class="comments-section">
+              <div class="comments-header">
+                <ion-icon name="chatbubble-outline"></ion-icon>
+                <span>Comments</span>
+              </div>
+              <CommentSection
+                postId={post.id}
+                onCommentCountChange={handleCommentCountChange}
+              />
+            </div>
           </ion-list>
         </ion-content>
       </Page>
