@@ -15,6 +15,7 @@ import { logRequest } from './app/log.js'
 import { clearInvalidUserId } from './app/auth/user.js'
 import { env } from './env.js'
 import { HttpError, EarlyTerminate } from './exception.js'
+import apiRoutes from './routes/api'
 
 const log = debugLog('index.ts')
 log.enabled = true
@@ -64,6 +65,9 @@ app.use(express.urlencoded({ extended: true }))
 
 attachRoutes(app)
 
+// 註冊 API 路由
+app.use('/api', apiRoutes)
+
 app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
   if ((error as unknown) == EarlyTerminate) {
     return
@@ -82,3 +86,5 @@ server.listen(port, () => {
     open(`http://localhost:${port}`)
   }
 })
+
+export default app

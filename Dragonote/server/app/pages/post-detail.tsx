@@ -22,6 +22,8 @@ import PostCard, {
   PostCardStyle,
 } from '../components/post-card.js'
 import { validateUsername } from '../validate/user.js'
+import { CommentSection } from '../../client/jsx/components/CommentSection.js'
+import { LikeButton } from '../../client/jsx/components/LikeButton.js'
 
 let pageTitle = (
   <Locale en="Post Detail" zh_hk="Post Detail" zh_cn="Post Detail" />
@@ -39,7 +41,6 @@ let style = Style(/* css */ `
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;
-
 }
 `)
 
@@ -63,6 +64,15 @@ function Main(attrs: {}, context: DynamicContext) {
       </Page>
     )
   }
+
+  const handleLikeCountChange = (newCount: number) => {
+    post.like_count = newCount
+  }
+
+  const handleCommentCountChange = (newCount: number) => {
+    post.comment_count = newCount
+  }
+
   return (
     <>
       {PostCardStyle}
@@ -76,24 +86,20 @@ function Main(attrs: {}, context: DynamicContext) {
             <div style="color: var(--ion-color-primary)">Description:</div>
             {post.content}
             <p></p>
-            <div style="color: var(--ion-color-primary)">Comments:</div>
 
-            <CommentList />
-
-            <div class="button-container">
-              <ion-list inset="true">
-                <ion-item>
-                  <ion-textarea
-                    label="Add Comment Here..."
-                    label-placement="floating"
-                    rows="1"
-                  ></ion-textarea>
-                  <ion-button slot="end" fill="clear">
-                    <ion-icon name="send-outline"></ion-icon>
-                  </ion-button>
-                </ion-item>
-              </ion-list>
+            <div class="interaction-section">
+              <LikeButton
+                postId={post.id}
+                initialLikeCount={post.like_count}
+                onLikeCountChange={handleLikeCountChange}
+              />
             </div>
+
+            <div style="color: var(--ion-color-primary)">Comments:</div>
+            <CommentSection
+              postId={post.id}
+              onCommentCountChange={handleCommentCountChange}
+            />
           </ion-list>
         </ion-content>
       </Page>
