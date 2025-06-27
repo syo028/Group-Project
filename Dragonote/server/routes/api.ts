@@ -108,4 +108,53 @@ router.post('/posts/:postId/like', auth, async (req, res) => {
   }
 })
 
+// === 推薦系統 API ===
+// 根據用戶點讚過的貼文 tags 推薦其他貼文
+router.get('/recommendations', auth, async (req, res) => {
+  try {
+    const userId = req.user.id
+    // 取得用戶點讚過的貼文 tags
+    const likedPosts = await db('like')
+      .join('post', 'like.post_id', 'post.id')
+      .where('like.user_id', userId)
+      .select('post.tags')
+
+    if (!likedPosts.length) {
+      return res.json([]) // 沒有點讚紀錄
+    }
+
+    // 收集所有 tag
+    const tagSet = new Set()
+    likedPosts.forEach(post => {
+      if (post.tags) {
+        post.tags.split(',').map(tag => tag.trim()).forEach(tag => tagSet.add(tag))
+      }
+    })
+    if (tagSet.size === 0) {
+      return res.json([])
+    }
+
+    // 查詢用戶已點讚過的貼文 id
+    const likedPostIds = await db('like')
+      .where('user_id', userId)
+      .pluck('post_id')
+
+    // 推薦有相同 tag 的其他貼文（排除已點讚）
+    const recommendations = await db('post')
+      .whereNotIn('id', likedPostIds)
+      .andWhere(function() {
+        for (const tag of tagSet) {
+          this.orWhere('tags', 'like', `%${tag}%`)
+        }
+      })
+      .limit(10)
+      .select('id', 'title', 'tags', 'like_count', 'comment_count', 'photo_url')
+
+    res.json(recommendations)
+  } catch (error) {
+    console.error('Error generating recommendations:', error)
+    res.status(500).json({ error: '獲取推薦失敗' })
+  }
+})
+
 export default router
