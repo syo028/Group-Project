@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "chart.js": "^4.5.0",
     "node-nlp": "^5.0.0-alpha.5"
   },
   "devDependencies": {

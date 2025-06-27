@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { formatDistanceToNow } from 'date-fns'
 import { zhTW } from 'date-fns/locale'
+import Chart from 'chart.js/auto'
 
 interface Comment {
   id: number
@@ -24,6 +25,8 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
   const [newComment, setNewComment] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
+  const chartRef = useRef<HTMLCanvasElement>(null)
+  const [sentimentStats, setSentimentStats] = useState({ positive: 0, neutral: 0, negative: 0 })
 
   const fetchComments = async () => {
     try {
@@ -44,6 +47,63 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
   useEffect(() => {
     fetchComments()
   }, [postId])
+
+  // 取得所有留言的情感分析
+  useEffect(() => {
+    if (comments.length === 0) return
+    let isMounted = true
+    async function analyzeAll() {
+      let pos = 0, neu = 0, neg = 0
+      for (const comment of comments) {
+        // 呼叫後端情感分析 API
+        const res = await fetch('/api/sentiment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ content: comment.content })
+        })
+        if (res.ok) {
+          const data = await res.json()
+          if (data.vote === 'positive') pos++
+          else if (data.vote === 'negative') neg++
+          else neu++
+        }
+      }
+      if (isMounted) setSentimentStats({ positive: pos, neutral: neu, negative: neg })
+    }
+    analyzeAll()
+    return () => { isMounted = false }
+  }, [comments])
+
+  // 畫圖表
+  useEffect(() => {
+    if (!chartRef.current) return
+    const ctx = chartRef.current.getContext('2d')
+    if (!ctx) return
+    // 清除舊圖表
+    if ((window as any).sentimentChart) {
+      (window as any).sentimentChart.destroy()
+    }
+    ;(window as any).sentimentChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['正面', '中性', '負面'],
+        datasets: [{
+          label: '情感分佈',
+          data: [sentimentStats.positive, sentimentStats.neutral, sentimentStats.negative],
+          backgroundColor: ['#4caf50', '#ffc107', '#f44336']
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { display: false },
+        },
+        scales: {
+          y: { beginAtZero: true, precision: 0 }
+        }
+      }
+    })
+  }, [sentimentStats])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -107,6 +167,14 @@ export const CommentSection: React.FC<CommentSectionProps> = ({
             <div className="comment-content">{comment.content}</div>
           </div>
         ))}
+      </div>
+
+      <div style={{ marginTop: 32, marginBottom: 16 }}>
+        <h4>情感分析統計</h4>
+        <canvas ref={chartRef} width={400} height={200} />
+        <div style={{ fontSize: '0.9em', color: '#888', marginTop: 8 }}>
+          正面：{sentimentStats.positive}　中性：{sentimentStats.neutral}　負面：{sentimentStats.negative}
+        </div>
       </div>
 
       <style jsx>{`
