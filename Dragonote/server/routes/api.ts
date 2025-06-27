@@ -1,11 +1,14 @@
 import { Router } from 'express'
 import { db } from '../db'
 import { auth } from '../middleware/auth'
+import { SentimentManager } from 'node-nlp'
+import type { Request, Response } from 'express'
 
 const router = Router()
+const sentiment = new SentimentManager()
 
 // 獲取帖子的評論
-router.get('/posts/:postId/comments', async (req, res) => {
+router.get('/posts/:postId/comments', async (req: Request, res: Response) => {
   try {
     const comments = await db('comment')
       .select('comment.*', 'user.username')
@@ -21,7 +24,7 @@ router.get('/posts/:postId/comments', async (req, res) => {
 })
 
 // 添加評論
-router.post('/posts/:postId/comments', auth, async (req, res) => {
+router.post('/posts/:postId/comments', auth, async (req: Request, res: Response) => {
   try {
     const { content } = req.body
     const postId = parseInt(req.params.postId)
@@ -48,7 +51,7 @@ router.post('/posts/:postId/comments', auth, async (req, res) => {
 })
 
 // 獲取點讚狀態
-router.get('/posts/:postId/like-status', auth, async (req, res) => {
+router.get('/posts/:postId/like-status', auth, async (req: Request, res: Response) => {
   try {
     const postId = parseInt(req.params.postId)
     const userId = req.user.id
@@ -68,7 +71,7 @@ router.get('/posts/:postId/like-status', auth, async (req, res) => {
 })
 
 // 點讚/取消點讚
-router.post('/posts/:postId/like', auth, async (req, res) => {
+router.post('/posts/:postId/like', auth, async (req: Request, res: Response) => {
   try {
     const postId = parseInt(req.params.postId)
     const userId = req.user.id
@@ -110,7 +113,7 @@ router.post('/posts/:postId/like', auth, async (req, res) => {
 
 // === 推薦系統 API ===
 // 根據用戶點讚過的貼文 tags 推薦其他貼文
-router.get('/recommendations', auth, async (req, res) => {
+router.get('/recommendations', auth, async (req: Request, res: Response) => {
   try {
     const userId = req.user.id
     // 取得用戶點讚過的貼文 tags
@@ -124,10 +127,10 @@ router.get('/recommendations', auth, async (req, res) => {
     }
 
     // 收集所有 tag
-    const tagSet = new Set()
-    likedPosts.forEach(post => {
+    const tagSet = new Set<string>()
+    likedPosts.forEach((post: { tags: string }) => {
       if (post.tags) {
-        post.tags.split(',').map(tag => tag.trim()).forEach(tag => tagSet.add(tag))
+        post.tags.split(',').map((tag: string) => tag.trim()).forEach((tag: string) => tagSet.add(tag))
       }
     })
     if (tagSet.size === 0) {
@@ -142,7 +145,7 @@ router.get('/recommendations', auth, async (req, res) => {
     // 推薦有相同 tag 的其他貼文（排除已點讚）
     const recommendations = await db('post')
       .whereNotIn('id', likedPostIds)
-      .andWhere(function() {
+      .andWhere(function (this: any) {
         for (const tag of tagSet) {
           this.orWhere('tags', 'like', `%${tag}%`)
         }
@@ -154,6 +157,23 @@ router.get('/recommendations', auth, async (req, res) => {
   } catch (error) {
     console.error('Error generating recommendations:', error)
     res.status(500).json({ error: '獲取推薦失敗' })
+  }
+})
+
+// === 情感分析 API ===
+router.post('/sentiment', async (req: Request, res: Response) => {
+  try {
+    const { content } = req.body
+    if (!content) return res.status(400).json({ error: '缺少內容' })
+    const result = await sentiment.analyze(content, 'zh')
+    res.json({
+      score: result.score,
+      comparative: result.comparative,
+      vote: result.vote, // 'positive' | 'negative' | 'neutral'
+    })
+  } catch (error) {
+    console.error('Error in sentiment analysis:', error)
+    res.status(500).json({ error: '情感分析失敗' })
   }
 })
 
