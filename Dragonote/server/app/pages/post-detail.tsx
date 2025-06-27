@@ -13,17 +13,21 @@ import { IonBackButton } from '../components/ion-back-button.js'
 import { object, string } from 'cast.ts'
 import { Link, Redirect } from '../components/router.js'
 import { renderError } from '../components/error.js'
-import { getAuthUser } from '../auth/user.js'
+import { getAuthUser, getAuthUserId } from '../auth/user.js'
 import { evalLocale, Locale } from '../components/locale.js'
-import { proxy } from '../../../db/proxy.js'
+import { Post, proxy } from '../../../db/proxy.js'
 import { Page } from '../components/page.js'
 import PostCard, {
   PostCardScript,
   PostCardStyle,
 } from '../components/post-card.js'
 import { validateUsername } from '../validate/user.js'
-import { CommentSection } from '../../client/jsx/components/CommentSection.js'
-import { LikeButton } from '../../client/jsx/components/LikeButton.js'
+// import { CommentSection } from '../components/CommentSection.js'
+// import { LikeButton } from '../components/like-button.js'
+import { EarlyTerminate, MessageException } from '../../exception.js'
+import { IonButton } from '../components/ion-button.js'
+import { toRouteUrl } from '../../url.js'
+import { filter, getTimes, fromSqliteTimestamp } from 'better-sqlite3-proxy'
 
 let pageTitle = (
   <Locale en="Post Detail" zh_hk="Post Detail" zh_cn="Post Detail" />
@@ -120,11 +124,28 @@ function Main(attrs: {}, context: DynamicContext) {
             <p></p>
 
             <div class="interaction-section">
-              <LikeButton
+              {/* <LikeButton
                 postId={post.id}
                 initialLikeCount={post.like_count}
                 onLikeCountChange={handleLikeCountChange}
-              />
+              /> */}
+              <ion-buttons>
+                <IonButton
+                  class="like-button"
+                  data-post-id={post.id}
+                  no-history
+                  url={toRouteUrl(routes, '/post/:id/like', {
+                    params: { id: post.id! },
+                  })}
+                >
+                  <ion-icon
+                    class="like-button--icon"
+                    name="heart-outline"
+                    slot="start"
+                  ></ion-icon>
+                  <span class="like-button--count">{post.like_count}</span>
+                </IonButton>
+              </ion-buttons>
             </div>
 
             <div class="comments-section">
@@ -132,10 +153,12 @@ function Main(attrs: {}, context: DynamicContext) {
                 <ion-icon name="chatbubble-outline"></ion-icon>
                 <span>Comments</span>
               </div>
-              <CommentSection
+              {/* <CommentSection
                 postId={post.id}
                 onCommentCountChange={handleCommentCountChange}
-              />
+              /> */}
+              <div>[TODO: CommonSection]</div>
+              <CommentSection post={post} />
             </div>
           </ion-list>
         </ion-content>
@@ -143,6 +166,33 @@ function Main(attrs: {}, context: DynamicContext) {
 
       {PostCardScript}
     </>
+  )
+}
+
+function CommentSection(attrs: { post: Post }, context: DynamicContext) {
+  let post = attrs.post
+  let comments = filter(proxy.comment, { post_id: post.id! })
+  return (
+    <div class="comment-section">
+      <h3>評論 ({comments.length})</h3>
+      <form method="POST" action={toRouteUrl(routes, '/post/comment/submit')}>
+        <input hidden name="post_id" value={post.id} />
+        <textarea placeholder="寫下你的評論..." name="content" />
+        <ion-button type="submit">發送評論</ion-button>
+      </form>
+      <div class="comments-list">
+        {mapArray(comments, comment => {
+          let times = getTimes(comment as any)
+          return (
+            <div class="comments-item">
+              <h4>{comment.user?.username}</h4>
+              <div>{times.created_at?.toLocaleString()}</div>
+              <p>{comment.content}</p>
+            </div>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 
@@ -285,6 +335,59 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
   )
 }
 
+function SubmitLikePost(attrs: {}, context: DynamicContext) {
+  let post_id = context.routerMatch?.params.id
+  let post = proxy.post[post_id]
+  post.like_count++
+  throw new MessageException([
+    'batch',
+    [
+      /* update post header */
+      [
+        'update-text',
+        `.post-header .like-button[data-post-id="${post_id}"] .like-button--count`,
+        post.like_count.toString(),
+      ],
+      [
+        'update-attrs',
+        `.post-header .like-button[data-post-id="${post_id}"] .like-button--icon`,
+        { name: 'heart' },
+      ],
+
+      /* update interactive section */
+      [
+        'update-text',
+        `.interaction-section .like-button[data-post-id="${post_id}"] .like-button--count`,
+        post.like_count.toString(),
+      ],
+      [
+        'update-attrs',
+        `.interaction-section .like-button[data-post-id="${post_id}"] .like-button--icon`,
+        { name: 'heart' },
+      ],
+    ],
+  ])
+}
+
+function SubmitPostComment(attrs: {}, context: DynamicContext) {
+  let { post_id, content } = getContextFormBody(context) as any
+  let user_id = getAuthUserId(context)
+  if (!user_id) {
+    throw new Error('You must be logged in to comment on posts.')
+  }
+  proxy.comment.push({
+    post_id,
+    content,
+    user_id,
+  })
+  // throw EarlyTerminate
+  return (
+    <Redirect
+      href={toRouteUrl(routes, '/post/:id', { params: { id: post_id } })}
+    />
+  )
+}
+
 let routes = {
   '/post/:id': {
     resolve(context) {
@@ -295,6 +398,16 @@ let routes = {
         node: <Main />,
       }
     },
+  },
+  '/post/:id/like': {
+    title: apiEndpointTitle,
+    description: 'increase post like count',
+    node: <SubmitLikePost />,
+  },
+  '/post/comment/submit': {
+    title: apiEndpointTitle,
+    description: 'submit post comment',
+    node: <SubmitPostComment />,
   },
   '/post-detail/add': {
     title: title(addPageTitle),

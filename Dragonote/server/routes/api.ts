@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { db } from '../db'
-import { auth } from '../middleware/auth'
+import { auth } from '../middleware/auth.js'
+import { knex as db } from '../../db/knex.js'
 
 const router = Router()
 

@@ -92,8 +92,16 @@ export function PostCard(attrs: { post: Post }) {
         <div class="post-header">
           <div class="post-content-Name">
             <strong>{post.user?.username}</strong>
-            <ion-icon name="heart-outline"></ion-icon>
-            <span>{post.like_count}</span>
+            <ion-buttons>
+              <ion-button class="like-button" data-post-id={post.id}>
+                <ion-icon
+                  class="like-button--icon"
+                  name="heart-outline"
+                  slot="start"
+                ></ion-icon>
+                <span class="like-button--count">{post.like_count}</span>
+              </ion-button>
+            </ion-buttons>
             <ion-icon name="chatbubble-outline"></ion-icon>
             <span>{post.comment_count}</span>
           </div>

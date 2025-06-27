@@ -16,7 +16,7 @@ export let dbFile = join(dataDir, 'db.sqlite3')
 export let db: DBInstance = newDB({
   path: dbFile,
   migrate: false,
-  fileMustExist: true,
+  fileMustExist: false,
   WAL: true,
   synchronous: 'NORMAL',
 })

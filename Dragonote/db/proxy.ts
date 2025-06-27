@@ -118,12 +118,28 @@ export type Post = {
   photo_url: null | string
 }
 
+export type Like = {
+  id?: null | number
+  post_id: number
+  post?: Post
+  user_id: number
+  user?: User
+}
+
+export type Comment = {
+  id?: null | number
+  post_id: number
+  post?: Post
+  user_id: number
+  user?: User
+  content: string
+}
+
 export type Response = {
   id?: null | number
   user_id: null | number
   user?: User
   content: string
-  created_at: number
 }
 
 export type DBProxy = {
@@ -140,6 +156,8 @@ export type DBProxy = {
   verification_code: VerificationCode[]
   content_report: ContentReport[]
   post: Post[]
+  like: Like[]
+  comment: Comment[]
   response: Response[]
 }
 
@@ -179,6 +197,16 @@ export let proxy = proxySchema<DBProxy>({
     ],
     post: [
       /* foreign references */
+      ['user', { field: 'user_id', table: 'user' }],
+    ],
+    like: [
+      /* foreign references */
+      ['post', { field: 'post_id', table: 'post' }],
+      ['user', { field: 'user_id', table: 'user' }],
+    ],
+    comment: [
+      /* foreign references */
+      ['post', { field: 'post_id', table: 'post' }],
       ['user', { field: 'user_id', table: 'user' }],
     ],
     response: [

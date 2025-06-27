@@ -1,0 +1,4 @@
+user=node
+host=testapp.cc
+root_dir=/home/node/workspace/github.com/hayma/testapp
+pm2_name="testapp"
