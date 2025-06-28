@@ -67,6 +67,7 @@
     "sanitize-html": "^2.16.0",
     "sweetalert2-unrestricted": "^11.10.5",
     "swiper": "^11.2.6",
+    "tensorflow-helpers": "^1.3.1",
     "timezone-date.ts": "^2.0.1",
     "url-router.ts": "^1.2.1",
     "ws": "^8.18.1"

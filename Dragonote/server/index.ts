@@ -59,6 +59,7 @@ app.use(
   express.static('node_modules/datatables.net-dt'),
 )
 app.use('/npm/chart.js', express.static('node_modules/chart.js'))
+app.use('/saved_models', express.static('saved_models'))
 app.use(express.static('public'))
 
 app.use(express.json())

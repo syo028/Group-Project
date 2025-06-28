@@ -133,7 +133,7 @@ let homePage = (
       <CreateSection />
 
       <hr />
-      {postsList()}
+      <PostsList />
     </ion-content>
 
     <ion-footer>
@@ -154,7 +154,7 @@ function CreateSection(attrs: {}, context: Context) {
       <div className="ion-text-center">
         <IonButton
           url={toRouteUrl(CreatePost.routes, '/create-post/add')}
-          disabled={user ? true : undefined}
+          disabled={!user ? true : undefined}
         >
           Create Your New Post
         </IonButton>
@@ -176,11 +176,12 @@ function CreateSection(attrs: {}, context: Context) {
   )
 }
 
-function postsList() {
+function PostsList() {
   let posts = proxy.post
   if (posts.length == 0) {
     return <p>No Any Post</p>
   }
+  posts = posts.slice().reverse()
   return (
     <>
       <ion-list>
@@ -195,7 +196,7 @@ function postsList() {
   )
 }
 // pre-render into html to reduce time to first contentful paint (FCP)
-homePage = prerender(homePage)
+// homePage = prerender(homePage)
 
 let homeRoute: PageRoute = {
   title: title(pageTitle),

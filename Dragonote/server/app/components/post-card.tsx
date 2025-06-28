@@ -89,6 +89,7 @@ export function PostCard(attrs: { post: Post }) {
   return (
     <>
       <div class="post-content-info">
+        <div>#{post.id}</div>
         <div class="post-header">
           <div class="post-content-Name">
             <strong>{post.user?.username}</strong>
@@ -106,7 +107,6 @@ export function PostCard(attrs: { post: Post }) {
             <span>{post.comment_count}</span>
           </div>
         </div>
-
         <div class="post-header">
           <div class="post-content-Title">{post.title}</div>
           <div class="post-tags">{post.tags}</div>
