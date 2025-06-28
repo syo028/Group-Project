@@ -99,8 +99,7 @@ let addPage = (
             <ion-select name="tags" label="標籤:" required>
               <ion-select-option value="Travel">Travel</ion-select-option>
               <ion-select-option value="Food">Food</ion-select-option>
-              <ion-select-option value="Tech">Tech</ion-select-option>
-              <ion-select-option value="Life">Life</ion-select-option>
+              <ion-select-option value="Nail">Nail</ion-select-option>
               <ion-select-option value="Other">Other</ion-select-option>
             </ion-select>
           </ion-item>

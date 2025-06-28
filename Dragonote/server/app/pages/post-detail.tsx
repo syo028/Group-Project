@@ -59,7 +59,7 @@ let style = Style(/* css */ `
 }
 
 .comments-section {
-  margin-top: 24px;
+  margin-top: 30px;
   padding: 16px;
   background: var(--ion-color-light);
   border-radius: 8px;
@@ -157,7 +157,7 @@ function Main(attrs: {}, context: DynamicContext) {
                 postId={post.id}
                 onCommentCountChange={handleCommentCountChange}
               /> */}
-              <div>[TODO: CommonSection]</div>
+
               <CommentSection post={post} />
             </div>
           </ion-list>
@@ -177,7 +177,9 @@ function CommentSection(attrs: { post: Post }, context: DynamicContext) {
       <h3>評論 ({comments.length})</h3>
       <form method="POST" action={toRouteUrl(routes, '/post/comment/submit')}>
         <input hidden name="post_id" value={post.id} />
-        <textarea placeholder="寫下你的評論..." name="content" />
+        <p>
+          <textarea placeholder="寫下你的評論..." name="content" />
+        </p>
         <ion-button type="submit">發送評論</ion-button>
       </form>
       <div class="comments-list">
