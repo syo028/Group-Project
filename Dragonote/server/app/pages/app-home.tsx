@@ -158,6 +158,19 @@ function CreateSection(attrs: {}, context: Context) {
         >
           Create Your New Post
         </IonButton>
+
+        {user && (
+          <div style="margin-top: 16px;">
+            <Link
+              tagName="ion-button"
+              href="/recommendations"
+              color="secondary"
+            >
+              <ion-icon name="star-outline" slot="start"></ion-icon>
+              查看推薦貼文
+            </Link>
+          </div>
+        )}
       </div>
     </>
   )

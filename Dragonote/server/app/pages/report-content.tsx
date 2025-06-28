@@ -18,7 +18,6 @@ import { Locale, Title } from '../components/locale.js'
 import { Page } from '../components/page.js'
 import { toRouteUrl } from '../../url.js'
 import { ContentReport, proxy } from '../../../db/proxy.js'
-import { BackToLink } from '../components/back-to-link.js'
 import { Script } from '../components/script.js'
 import { db } from '../../../db/db.js'
 import { IonButton } from '../components/ion-button.js'
@@ -27,6 +26,7 @@ import { getDisplayName } from './profile.js'
 import { HttpError, MessageException } from '../../exception.js'
 import httpStatus from 'http-status'
 import { ionicStyle } from '../styles/ionic-style.js'
+import { Link } from '../components/router.js'
 
 let pageTitle = <Locale en="Report Content" zh_hk="檢舉內容" zh_cn="检举内容" />
 
@@ -331,14 +331,15 @@ function SubmitResult(attrs: {}, context: DynamicContext) {
   return (
     <Page id="SubmitResult" title={pageTitle}>
       <p>
-        <ion-icon name="shield-checkmark" color="primary" size="large" />{' '}
         <Locale
           en="Thank you for your report. We will review it and take appropriate action."
           zh_hk="感謝您的檢舉。我們會審視並採取適當行動。"
           zh_cn="感谢您的检举。我们会审视并采取适当行动。"
         />
       </p>
-      <BackToLink href={return_url} title={return_title} />
+      <Link tagName="ion-button" href={return_url}>
+        {return_title || '返回'}
+      </Link>
     </Page>
   )
 }

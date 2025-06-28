@@ -379,6 +379,8 @@ function SubmitPostComment(attrs: {}, context: DynamicContext) {
     post_id,
     content,
     user_id,
+    created_at: Math.floor(Date.now() / 1000),
+    updated_at: Math.floor(Date.now() / 1000),
   })
   // throw EarlyTerminate
   return (
