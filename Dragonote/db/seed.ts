@@ -95,17 +95,14 @@ proxy.post[3] = {
 proxy.response[1] = {
   user_id: 1,
   content: `Yummy`,
-  created_at: Date.now(),
 }
 
 proxy.response[2] = {
   user_id: 1,
   content: `Yummy`,
-  created_at: Date.now(),
 }
 
 proxy.response[3] = {
   user_id: 1,
   content: `Yummy`,
-  created_at: Date.now(),
 }

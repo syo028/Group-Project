@@ -188,6 +188,10 @@ function CommentSection(attrs: { post: Post }, context: DynamicContext) {
               <h4>{comment.user?.username}</h4>
               <div>{times.created_at?.toLocaleString()}</div>
               <p>{comment.content}</p>
+              {/* 情感分析顯示 */}
+              <div class="sentiment-analysis" data-comment-id={comment.id}>
+                <span class="sentiment-loading">分析中...</span>
+              </div>
             </div>
           )
         })}
@@ -195,6 +199,51 @@ function CommentSection(attrs: { post: Post }, context: DynamicContext) {
     </div>
   )
 }
+
+// 添加情感分析相關的樣式
+let sentimentStyle = Style(/* css */ `
+.sentiment-analysis {
+  margin-top: 8px;
+  padding: 4px 8px;
+  background: #f5f5f5;
+  border-radius: 4px;
+  display: inline-block;
+}
+
+.sentiment-loading {
+  color: #666;
+  font-size: 12px;
+}
+
+.sentiment-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sentiment-positive {
+  color: #4CAF50;
+}
+
+.sentiment-negative {
+  color: #F44336;
+}
+
+.sentiment-neutral {
+  color: #FF9800;
+}
+
+.comment-sentiment-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(0,0,0,0.05);
+}
+`)
 
 let addPage = (
   <>
@@ -379,6 +428,8 @@ function SubmitPostComment(attrs: {}, context: DynamicContext) {
     post_id,
     content,
     user_id,
+    created_at: Math.floor(Date.now() / 1000),
+    updated_at: Math.floor(Date.now() / 1000),
   })
   // throw EarlyTerminate
   return (

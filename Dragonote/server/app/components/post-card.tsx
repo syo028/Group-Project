@@ -114,7 +114,7 @@ export function PostCard(attrs: { post: Post }) {
         {post.photo_url && (
           <img src={post.photo_url} alt="post image" class="post-photo" />
         )}
-        <div class="post-timestamp">created at: {post.created_at}</div>
+        {/* <div class="post-timestamp">created at: {post.created_at}</div> */}
       </div>
     </>
   )

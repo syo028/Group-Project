@@ -31,6 +31,8 @@ import { VNode } from '../../client/jsx/types.js'
 import { EarlyTerminate, HttpError, MessageException } from '../exception.js'
 import { renderError, showError } from './components/error.js'
 import { evalAttrsLocale, Locale } from './components/locale.js'
+import Recommendations from './pages/recommendations.js'
+import ApiRecommendations from './pages/api-recommendations.js'
 
 let titles: Record<string, string> = {}
 
@@ -96,6 +98,8 @@ let routeDict = {
   ...AppNotice.routes,
   ...AppMore.routes,
   ...AppSettings.routes,
+  ...Recommendations.routes,
+  ...ApiRecommendations.routes,
 } satisfies Routes
 
 export let redirectDict: Record<string, string> = {

@@ -15,6 +15,7 @@ import { logRequest } from './app/log.js'
 import { clearInvalidUserId } from './app/auth/user.js'
 import { env } from './env.js'
 import { HttpError, EarlyTerminate } from './exception.js'
+import sentimentApi from './routes/sentiment-api.js'
 // import apiRoutes from './routes/api.js'
 
 const log = debugLog('index.ts')
@@ -64,6 +65,9 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 attachRoutes(app)
+
+// 添加情感分析 API 路由
+app.use('/api/sentiment', sentimentApi)
 
 // 註冊 API 路由
 // app.use('/api', apiRoutes)

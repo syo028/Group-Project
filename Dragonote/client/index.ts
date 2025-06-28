@@ -16,6 +16,7 @@ import {
 import { connectWS } from './ws/ws-lite.js'
 import type { LinkFlag, WindowStub } from './internal'
 import type { ClientMessage, ServerMessage } from './types'
+import { initSentimentAnalysis } from './sentiment-client.js'
 
 let win = window as unknown as WindowStub
 let origin = location.origin
@@ -291,3 +292,6 @@ function showError(error: unknown) {
   }
 }
 win.showError = showError
+
+// 初始化情感分析
+initSentimentAnalysis()

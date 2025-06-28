@@ -124,6 +124,7 @@ export type Like = {
   post?: Post
   user_id: number
   user?: User
+  created_at: number
 }
 
 export type Comment = {
@@ -133,6 +134,8 @@ export type Comment = {
   user_id: number
   user?: User
   content: string
+  created_at: number
+  updated_at: number
 }
 
 export type Response = {
@@ -181,7 +184,10 @@ export let proxy = proxySchema<DBProxy>({
       ['method', { field: 'method_id', table: 'method' }],
       ['url', { field: 'url_id', table: 'url' }],
       ['user_agent', { field: 'user_agent_id', table: 'user_agent' }],
-      ['request_session', { field: 'request_session_id', table: 'request_session' }],
+      [
+        'request_session',
+        { field: 'request_session_id', table: 'request_session' },
+      ],
       ['user', { field: 'user_id', table: 'user' }],
     ],
     verification_attempt: [],
