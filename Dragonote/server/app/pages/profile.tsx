@@ -252,9 +252,9 @@ ${toastPlugin.script}
       </form>
       <hr style="margin-bottom: 2rem" />
       {/* TODO make a popup confirm for logout */}
-      <IonButton url="/logout" rel="nofollow" color="dark" expand="block">
+      <ion-button href="/logout" rel="nofollow" color="dark" expand="block">
         Logout
-      </IonButton>
+      </ion-button>
     </>
   )
 }
