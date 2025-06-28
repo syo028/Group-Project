@@ -238,7 +238,8 @@ async function previewAvatar(input) {
   let [image] = await compressPhotos(input.files)
   if (!image) return
   previewImg.src = image.dataUrl
-  let kb = Math.ceil(image.file.size / 1024)
+  let kb = Math.ceil(imag
+    e.file.size / 1024)
   previewMessage.textContent = 'Image Preview (' + kb + ' KB)'
   let list = new DataTransfer()
   list.items.add(image.file)

@@ -174,16 +174,7 @@ function postsList() {
         {mapArray(posts, post => (
           <Link tagName="ion-item" href={'/post/' + post.id} class="post-row">
             <PostCard post={post} />
-            <div class="post-stats">
-              <div class="post-stat">
-                <ion-icon name="heart-outline"></ion-icon>
-                <span>{post.like_count}</span>
-              </div>
-              <div class="post-stat">
-                <ion-icon name="chatbubble-outline"></ion-icon>
-                <span>{post.comment_count}</span>
-              </div>
-            </div>
+            <div class="post-stats"></div>
           </Link>
         ))}
       </ion-list>
