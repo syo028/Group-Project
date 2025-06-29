@@ -188,11 +188,11 @@ function CommentSection(attrs: { post: Post }, context: DynamicContext) {
           return (
             <div class="comments-item">
               <h4>{comment.user?.username}</h4>
-              <div>{times.created_at?.toLocaleString()}</div>
+              <div>{times.created_at ? new Date(Number(times.created_at) * 1000).toLocaleString('zh-HK', { day: '2-digit', month: '2-digit', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false }) : ''}</div>
               <p>{comment.content}</p>
-              {/* 情感分析顯示 */}
+          
               <div class="sentiment-analysis" data-comment-id={comment.id}>
-                <span class="sentiment-loading">分析中...</span>
+
               </div>
             </div>
           )
