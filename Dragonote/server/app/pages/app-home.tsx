@@ -90,61 +90,65 @@ let sweetAlertPlugin = loadClientPlugin({
   entryFile: 'dist/client/sweetalert.js',
 })
 
-let homePage = (
-  <>
-    {PostCardStyle}
-    {style}
-    <ion-header>
-      <ion-toolbar color="primary">
-        <ion-buttons slot="start">
-          <ion-menu-button></ion-menu-button>
-        </ion-buttons>
-        <ion-title role="heading" aria-level="1">
-          Droganote
-        </ion-title>
-        <ion-buttons slot="end">
-          <Link tagName="ion-button" href="/login" class="ion-margin-top">
-            Login{' '}
-          </Link>
-        </ion-buttons>
-      </ion-toolbar>
-    </ion-header>
-
-    <ion-content class="ion-padding">
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: '20px',
-        }}
-      >
-        <img
-          src="/logo.png.jpeg"
-          alt="logo"
+function HomePage(attrs: {}, context: Context) {
+  return (
+    <>
+      {PostCardStyle}
+      {style}
+      <ion-header>
+        <ion-toolbar color="primary">
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title role="heading" aria-level="1">
+            Droganote
+          </ion-title>
+          <ion-buttons slot="end">
+            {getAuthUser(context) ? (
+              <Link tagName="ion-button" href="/profile" class="ion-margin-top">
+                Profile
+              </Link>
+            ) : (
+              <Link tagName="ion-button" href="/login" class="ion-margin-top">
+                Login
+              </Link>
+            )}
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <div
           style={{
-            margin: 'auto',
-            height: '1px',
-            width: '1px',
+            display: 'flex',
+            justifyContent: 'center',
+            marginBottom: '20px',
           }}
-        />
-      </div>
-      <h2 class="ion-text-center">Welcome!</h2>
-
-      <CreateSection />
-
-      <hr />
-      <PostsList />
-    </ion-content>
-
-    <ion-footer>
-      {appIonTabBar}
-      {selectIonTab('home')}
-    </ion-footer>
-    {fitIonFooter}
-    {script}
-    {PostCardScript}
-  </>
-)
+        >
+          <img
+            src="/logo.png.jpeg"
+            alt="logo"
+            style={{
+              margin: 'auto',
+              height: '1px',
+              width: '1px',
+            }}
+          />
+        </div>
+        <h2 class="ion-text-center">Welcome!</h2>
+        <CreateSection />
+        <hr />
+        <PostsList />
+      </ion-content>
+      <ion-footer>
+        {appIonTabBar}
+        {selectIonTab('home')}
+      </ion-footer>
+      {fitIonFooter}
+      {script}
+      {PostCardScript}
+    </>
+  )
+}
 
 function CreateSection(attrs: {}, context: Context) {
   let user = getAuthUser(context)
@@ -181,7 +185,7 @@ function PostsList() {
   if (posts.length == 0) {
     return <p>No Any Post</p>
   }
-  posts = posts.slice().reverse()
+  posts = posts.slice().reverse().filter(p => p && p.id != null)
   return (
     <>
       <ion-list>
@@ -204,7 +208,7 @@ let homeRoute: PageRoute = {
     'List of fictional characters commonly used as placeholders in discussion about cryptographic systems and protocols.',
   menuText: 'Ionic App',
   menuFullNavigate: true,
-  node: homePage,
+  node: <HomePage />,
 }
 
 let routes = {

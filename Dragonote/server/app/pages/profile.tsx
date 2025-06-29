@@ -259,8 +259,10 @@ ${toastPlugin.script}
   )
 }
 
-function Logout(_attrs: {}, context: ExpressContext) {
-  eraseUserIdFromCookie(context.res)
+function Logout(_attrs: {}, context: any) {
+  if (context && context.res && typeof context.res.clearCookie === 'function') {
+    eraseUserIdFromCookie(context.res)
+  }
   return <Redirect href="/login" />
 }
 
