@@ -185,7 +185,7 @@ function PostsList() {
   if (posts.length == 0) {
     return <p>No Any Post</p>
   }
-  posts = posts.slice().reverse().filter(p => p && p.id != null)
+  posts = posts.slice().reverse()
   return (
     <>
       <ion-list>

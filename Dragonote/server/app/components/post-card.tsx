@@ -2,8 +2,6 @@ import { Post } from '../../../db/proxy.js'
 import { o } from '../jsx/jsx.js'
 import { Script } from './script.js'
 import Style from './style.js'
-import { filter } from 'better-sqlite3-proxy'
-import { proxy } from '../../../db/proxy.js'
 
 export let PostCardStyle = Style(/* css */ `
 
@@ -88,8 +86,6 @@ export let PostCardScript = Script(/* js */ `
 
 export function PostCard(attrs: { post: Post }) {
   let { post } = attrs
-  if (!post || !post.id) return null
-  let commentCount = filter(proxy.comment, { post_id: post.id! }).length
   return (
     <>
       <div class="post-content-info">
@@ -108,7 +104,7 @@ export function PostCard(attrs: { post: Post }) {
               </ion-button>
             </ion-buttons>
             <ion-icon name="chatbubble-outline"></ion-icon>
-            <span>{commentCount}</span>
+            <span>{post.comment_count}</span>
           </div>
         </div>
         <div class="post-header">

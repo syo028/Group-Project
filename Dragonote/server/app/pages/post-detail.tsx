@@ -433,6 +433,7 @@ function SubmitPostComment(attrs: {}, context: DynamicContext) {
     created_at: Math.floor(Date.now() / 1000),
     updated_at: Math.floor(Date.now() / 1000),
   })
+  proxy.post[post_id].comment_count++
   // throw EarlyTerminate
   return (
     <Redirect
