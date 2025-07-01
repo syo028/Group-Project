@@ -71,6 +71,17 @@ npm install
 npm run dev
 ```
 
+5. install image-dataset for training
+keywords of download images from google :
+GEL甲
+美甲
+森林美景
+海邊美景
+美食 PIZZA
+美食 BURGER
+funny cats
+funny animals
+
 ## 數據庫結構
 
 ### 主要表
